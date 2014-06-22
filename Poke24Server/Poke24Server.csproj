@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Database\" />
+    <Folder Include="Hubs\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
