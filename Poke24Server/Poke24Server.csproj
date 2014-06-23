@@ -197,6 +197,7 @@
       <DependentUpon>201406230349019_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Card.cs" />
     <Compile Include="Models\GameConfig.cs" />
     <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />

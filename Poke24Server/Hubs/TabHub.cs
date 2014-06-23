@@ -24,12 +24,13 @@
                 game.Join(userid);
 
                 game.SaveCache();
-                Clients.Caller.test("join");
             }
 
             RefreshSeats(id);
-
-            Clients.Caller.test(tab);
+            if (game.Seats.All(x => x.IsOK))
+            {
+                RefreshGame(id);
+            }
             return base.OnConnected();
         }
 
@@ -53,13 +54,12 @@
             {
                 u.IsOK = true;
                 game.SaveCache();
+                RefreshSeats(id);
+                Clients.Caller.test("is ready");
                 if (game.Seats.All(x => x.IsOK))
                 {
                     BeginGame(id);
-                    return;
                 }
-                RefreshSeats(id);
-                Clients.Caller.test("is ready");
             }
             Clients.Caller.test("on ready");
         }
@@ -75,6 +75,25 @@
         public void BeginGame(Guid id)
         {
             Clients.Caller.test("begin");
+            var game = GameViewModel.GetGame(id);
+            game.BeginNew();
+            game.SaveCache();
+            RefreshGame(id);
+        }
+
+        private void RefreshGame(Guid id)
+        {
+            var tab = id.ToString();
+            var game = GameViewModel.GetGame(id);
+            if (game == null)
+            {
+                Clients.Caller.test("no game");
+            }
+            else
+            {
+                //Clients.Groups(new List<string> { tab }).refreshGame(game.Seats);
+                Clients.Group(tab).refreshGame(game);
+            }
         }
 
         public void RefreshSeats(Guid id)
@@ -87,7 +106,7 @@
             }
             else
             {
-                Clients.Groups(new List<string> { tab }).refreshUsers(game.Seats);
+                //Clients.Groups(new List<string> { tab }).refreshUsers(game.Seats);
                 Clients.Group(tab).refreshUsers(game.Seats);
             }
         }

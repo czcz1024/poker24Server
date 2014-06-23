@@ -12,6 +12,12 @@
 
         public List<Seat> Seats { get; set; }
 
+        public Guid LastHandUser { get; set; }
+
+        public List<Card> LastHand { get; set; }
+
+        public Guid NowUser { get; set; }
+
         public GameViewModel(GameConfig config)
         {
             Seats = new List<Seat>();
@@ -77,6 +83,26 @@
             {
                 AbsoluteExpiration = new DateTimeOffset(DateTime.Now.AddDays(1))
             });
+        }
+
+        public void BeginNew()
+        {
+            var cards = Card.GetOne();
+            cards = cards.OrderBy(x => Guid.NewGuid()).ToList();
+            var i = 0;
+            foreach (var item in cards)
+            {
+                Seats[i].InHand.Add(item);
+                i++;
+                if (i >= Seats.Count)
+                {
+                    i = 0;
+                }
+            }
+            foreach (var seat in Seats)
+            {
+                seat.InHand = seat.InHand.OrderByDescending(x => x.Value).ToList();
+            }
         }
     }
 }
