@@ -4,6 +4,14 @@ var app = {
 };
 
 $(function () {
+
+    var server = localStorage.getItem("server");
+    if (server != null) {
+        app.apiBaseUrl = server;
+    } else {
+        localStorage.setItem("server", app.apiBaseUrl);
+    }
+
     if (typeof (init) == "function") {
         init();
     }

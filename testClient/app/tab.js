@@ -14,7 +14,7 @@ function listentab(id, uid) {
     $.connection.hub.error(function (error) {
         console.log('SignalR error: ' + error);
     });
-    $.connection.hub.url = "http://192.168.1.103:1432/signalr";
+    $.connection.hub.url = app.apiBaseUrl+"signalr";
 
     var client = $.connection.tabHub.client;
     setClientFunc(client);
