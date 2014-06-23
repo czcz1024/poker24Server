@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/bootstrap-theme.css" rel="stylesheet" />
+</head>
+    <body>
+        
+        <div>
+            <h1>Title</h1>
+        </div>
+        <div>
+            <ul class="nav nav-tabs">
+                <li><a href="#login" data-toggle="tab">Login</a></li>
+                <li><a href="#register" data-toggle="tab">Register</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="login">
+                    <div>
+                        login
+                        <input id="loginName" />
+                        <input id="loginPass" />
+                        <button id="login">go</button>
+                    </div>
+                </div>
+                <div class="tab-pane" id="register">
+                    <div>
+                        reg
+                        <input id="regName" />
+                        <input id="regPass" />
+                        <button id="reg">go</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div>tool bars</div>
+
+        <script src="Scripts/jquery-2.1.1.js"></script>
+        <script src="Scripts/bootstrap.js"></script>
+        <script src="app/app.js"></script>
+        <script src="app/login.js"></script>
+    </body>
+</html>
