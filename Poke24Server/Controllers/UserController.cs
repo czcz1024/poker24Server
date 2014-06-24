@@ -18,17 +18,18 @@ namespace Poke24Server.Controllers
 
         public UserController()
         {
-            db = new DataContext();
+            //db = new DataContext();
         }
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            //db.Dispose();
             base.Dispose(disposing);
         }
 
         [HttpPost,HttpOptions]
         public Guid Register([FromBody]Users user)
         {
+            return Guid.Empty;
             if (db.Users.Any(x => x.UserName == user.UserName))
             {
                 return Guid.Empty;
@@ -42,12 +43,44 @@ namespace Poke24Server.Controllers
         [HttpPost,HttpOptions]
         public Guid Login([FromBody] LoginViewModel info)
         {
-            var obj = db.Users.FirstOrDefault(x => x.UserName == info.Username && x.Password == info.Password);
+            var obj = Users.FirstOrDefault(x => x.UserName == info.Username && x.Password == info.Password);
             if (obj == null)
             {
                 return Guid.Empty;
             }
             return obj.Id;
         }
+
+        public static List<Users> Users = new List<Users>
+        {
+            new Users
+            {
+                Id=Guid.Parse("10000000-0000-0000-0000-000000000000"),
+                UserName="a",
+                Password="a",
+                NickName="a"
+            },
+            new Users
+            {
+                Id=Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                UserName="b",
+                Password="b",
+                NickName="b"
+            },
+            new Users
+            {
+                Id=Guid.Parse("30000000-0000-0000-0000-000000000000"),
+                UserName="c",
+                Password="c",
+                NickName="c"
+            },
+            new Users
+            {
+                Id=Guid.Parse("40000000-0000-0000-0000-000000000000"),
+                UserName="d",
+                Password="d",
+                NickName="d"
+            }
+        };
     }
 }

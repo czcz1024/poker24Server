@@ -19,6 +19,8 @@ namespace Poke24Server.Models
 
         public bool IsFinish { get; set; }
 
+        public bool Bigest { get; set; }
+
         public Seat()
         {
             InHand = new List<Card>();

@@ -19,18 +19,42 @@ namespace Poke24Server.Controllers
 
         public TabsController()
         {
-            db = new DataContext();
+            //db = new DataContext();
         }
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            //db.Dispose();
             base.Dispose(disposing);
         }
 
         [HttpGet,HttpOptions]
         public IEnumerable<TabViewModel> List()
         {
-            return db.Tabs.ToList().Select(this.ConvertToViewModel);
+            //return db.Tabs.ToList().Select(this.ConvertToViewModel);
+            var list = new List<TabViewModel>
+            {
+                new TabViewModel
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    PlayerCount=1
+                },
+                new TabViewModel
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                    PlayerCount=2
+                },
+                new TabViewModel
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000003"),
+                    PlayerCount=3
+                },
+                new TabViewModel
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000004"),
+                    PlayerCount=4
+                }
+            };
+            return list;
         }
 
         private TabViewModel ConvertToViewModel(Tabs tabs)
@@ -45,6 +69,7 @@ namespace Poke24Server.Controllers
         [HttpPost,HttpOptions]
         public Guid CreateTab()
         {
+            return Guid.Empty;
             var tab = new Tabs { 
                 Id=Guid.NewGuid(),
                 Player=4,

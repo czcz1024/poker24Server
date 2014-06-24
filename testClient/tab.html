@@ -1,54 +1,105 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <link href="Content/bootstrap.css" rel="stylesheet" />
     <link href="Content/bootstrap-theme.css" rel="stylesheet" />
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        .tools {
+            position: fixed;
+            bottom: 0px;
+        }
+
+            .tools ul li {
+            }
+
+            .tools ul a {
+                text-align: center;
+            }
+
+        .seats li {
+            font-size: 10px;
+        }
+
+        .nowcards {
+            min-height: 50px;
+        }
+
+            .nowcards li {
+                height: 40px;
+                border: 1px solid blue;
+            }
+
+        .options {
+        }
+
+        .inhand {
+            height: 200px;
+            background-color: red;
+        }
+
+            .inhand li {
+                height: 40px;
+                border: 1px solid green;
+            }
+
         .seats {
             width: 15%;
         }
-        .will{
-            background-color:#e58e8e;
+
+        .will {
+            background-color: #e58e8e;
         }
-        .nowTurn{
-            background-color:#00ff00;
+
+        .nowTurn {
+            background-color: #00ff00;
         }
     </style>
-</head>
-    <body>
-        
-        <div class="">
-            <ul class="" id="seats"></ul>
-        </div>
-        <div id="last">
-            
-        </div>
-        <div>
-            <button onclick="checkPush()">push</button>
-            <button>pass</button>
-        </div>
-        <div>
-            <ul id="hands">
-                
-            </ul>
-        </div>
-        
-        <div style="display:none">
-            <ul>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-            </ul>
-        </div>
 
-        <script src="Scripts/jquery-2.1.1.js"></script>
-        <script src="Scripts/bootstrap.js"></script>
-        <script src="http://192.168.1.103:1432/scripts/jquery.signalR-2.1.0.js"></script>
-        <script src="http://192.168.1.103:1432/signalr/hubs"></script>
-        <script src="app/app.js"></script>
-        <script src="app/tab.js"></script>
-    </body>
+</head>
+<body>
+
+    <div class="row">
+        <ul class="col-xs-12 seats" id="seats"></ul>
+    </div>
+    <div class="row nowcards">
+        <ul id="last" class="col-xs-12"></ul>
+    </div>
+    <div class="row options">
+        <div class="col-xs-12">
+            <button onclick="checkPush()">push</button>
+            <button>pass</button>    
+        </div>
+        
+    </div>
+    <div class="row inhand">
+        <ul id="hands" class="col-xs-12"></ul>
+    </div>
+
+    <div style="display:none">
+        <ul>
+            <li><a href="">1</a></li>
+            <li><a href="">1</a></li>
+            <li><a href="">1</a></li>
+            <li><a href="">1</a></li>
+        </ul>
+    </div>
+
+    <script src="Scripts/jquery-2.1.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <script src="http://localhost:1234/scripts/jquery.signalR-2.1.0.js"></script>
+    <script src="http://localhost:1234/signalr/hubs"></script>
+    <script src="app/app.js"></script>
+    <script src="app/tab.js"></script>
+</body>
 </html>

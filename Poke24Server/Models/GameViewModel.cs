@@ -33,7 +33,7 @@
             var game = cache.Get("tab_" + id) as GameViewModel;
             if (game == null)
             {
-                using (var db = new DataContext())
+                using (var db = new MockData())
                 {
                     var tab = db.Tabs.FirstOrDefault(x => x.Id == id);
                     if (tab != null)
@@ -64,11 +64,11 @@
                 }
                 else
                 {
-                    using (var db = new DataContext())
+                    using (var db = new MockData())
                     {
                         firstEmpty.HasUser = true;
                         firstEmpty.UserId = userid;
-                        firstEmpty.UserName = db.Users.Find(userid).UserName;
+                        firstEmpty.UserName = db.Users.FirstOrDefault(x=>x.Id==userid).UserName;
                     }
                     return true;
                 }
@@ -108,13 +108,34 @@
         public void Poke(Guid uid, string hand)
         {
             this.LastHandUser = uid;
-            var rest = Seats.SkipWhile(x => x.UserId != uid).ToList();
-            this.NowUser = rest.Count() == 1 ? this.Seats[0].UserId : rest[1].UserId;
+            var nowu = Seats.FirstOrDefault(x => x.UserId == uid);
+            if (hand == "4,4")
+            {
+                if (IsBoom(LastHand))
+                {
+                    NowUser = uid;
+                    nowu.Bigest = true;
+                }
+            }
+            else
+            {
+                var rest = Seats.SkipWhile(x => x.UserId != uid).ToList();
+                this.NowUser = rest.Count() == 1 ? this.Seats[0].UserId : rest[1].UserId;
+                if (NowUser == LastHandUser)
+                {
+                    nowu.Bigest = true;
+                }
+                else
+                {
+                    nowu.Bigest = false;
+                }
+            }
+            
 
             var pokeValue = hand.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
             
             this.LastHand = pokeValue.Select(x => new Card(x)).ToList();
-            var nowu = Seats.FirstOrDefault(x => x.UserId == uid);
+            
             var uhand = nowu.InHand;
             foreach (var c in LastHand)
             {
@@ -133,6 +154,11 @@
 
         public void GameOver()
         {
+        }
+
+        public bool IsBoom(List<Card> card)
+        {
+            return true;
         }
     }
 }

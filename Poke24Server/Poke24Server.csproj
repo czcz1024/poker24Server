@@ -200,6 +200,7 @@
     <Compile Include="Models\GameConfig.cs" />
     <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\MockData.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\TabViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
