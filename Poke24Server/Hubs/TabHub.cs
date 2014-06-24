@@ -68,8 +68,12 @@
         {
         }
 
-        public void Poke(string hand)
+        public void Poke(Guid id,Guid uid,string hand)
         {
+            var game = GameViewModel.GetGame(id);
+            game.Poke(uid, hand);
+            game.SaveCache();
+            RefreshGame(id);
         }
 
         public void BeginGame(Guid id)

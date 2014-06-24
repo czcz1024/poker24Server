@@ -92,7 +92,7 @@
     <Content Include="app\login.js" />
     <Content Include="app\tab.js" />
     <Content Include="layout.html" />
-    <Content Include="index.html" />
+    <Content Include="login.html" />
     <Content Include="list.html" />
     <Content Include="tab.html" />
     <Content Include="Web.config" />

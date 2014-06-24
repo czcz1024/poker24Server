@@ -36,7 +36,8 @@ namespace Poke24Server.Controllers
         private TabViewModel ConvertToViewModel(Tabs tabs)
         {
             var r = new TabViewModel(){
-                Id=tabs.Id
+                Id=tabs.Id,
+                PlayerCount=tabs.Player
             };
             return r;
         }

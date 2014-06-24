@@ -40,6 +40,7 @@ function refreshSeats(seats) {
     $("#seats").empty();
     for (var i = 0; i < seats.length; i++) {
         var li = $("<li />");
+        li.attr("v", seats[i].UserId);
         var seat = seats[i];
         if (seat.HasUser) {
             li.append(seat.UserName);
@@ -68,6 +69,28 @@ function refreshGame(game) {
             refreshHand(seat.InHand);
         }
     }
+
+    app.lastHand = game.LastHand;
+    app.lastPusher = game.LastHandUser;
+    console.log(game.LastHandUser);
+    app.nowPusher = game.NowUser;
+
+    refreshState();
+}
+
+function refreshState() {
+    if (app.lastHand) {
+        var con = $("#last");
+        con.empty();
+        for (var i = 0; i < app.lastHand.length; i++) {
+            var li = $("<li />");
+            li.append(app.lastHand[i].Text);
+            con.append(li);
+        }
+    }
+
+    $("#seats li").removeClass("nowTurn");
+    $("#seats li[v=" + app.lastPusher + "]").addClass("nowTurn");
 }
 
 function refreshHand(hands) {
@@ -86,5 +109,9 @@ function refreshHand(hands) {
 
 function checkPush() {
     var will = $("#hands .will");
-    console.log(will.length);
+    var x=will.map(function () {
+        return $(this).attr("v");
+    }).get().join(",");
+
+    app.proxy.server.poke(app.tab,app.uid,x);
 }

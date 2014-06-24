@@ -5,5 +5,7 @@
     public class TabViewModel
     {
         public Guid Id { get; set; }
+
+        public int PlayerCount { get; set; }
     }
 }

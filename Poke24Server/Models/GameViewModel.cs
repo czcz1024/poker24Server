@@ -104,5 +104,22 @@
                 seat.InHand = seat.InHand.OrderByDescending(x => x.Value).ToList();
             }
         }
+
+        public void Poke(Guid uid, string hand)
+        {
+            this.LastHandUser = uid;
+            var rest = Seats.SkipWhile(x => x.UserId != uid).ToList();
+            this.NowUser = rest.Count() == 1 ? this.Seats[0].UserId : rest[1].UserId;
+
+            var pokeValue = hand.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+            
+            this.LastHand = pokeValue.Select(x => new Card(x)).ToList();
+            var uhand = Seats.FirstOrDefault(x => x.UserId == uid).InHand;
+            foreach (var c in LastHand)
+            {
+                var inhandc = uhand.FirstOrDefault(x => x.Value == c.Value);
+                uhand.Remove(inhandc);
+            }
+        }
     }
 }
