@@ -114,12 +114,25 @@
             var pokeValue = hand.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
             
             this.LastHand = pokeValue.Select(x => new Card(x)).ToList();
-            var uhand = Seats.FirstOrDefault(x => x.UserId == uid).InHand;
+            var nowu = Seats.FirstOrDefault(x => x.UserId == uid);
+            var uhand = nowu.InHand;
             foreach (var c in LastHand)
             {
                 var inhandc = uhand.FirstOrDefault(x => x.Value == c.Value);
                 uhand.Remove(inhandc);
             }
+            if (!uhand.Any())
+            {
+                nowu.IsFinish = true;
+            }
+            if (Seats.All(x => x.IsFinish))
+            {
+                GameOver();
+            }
+        }
+
+        public void GameOver()
+        {
         }
     }
 }

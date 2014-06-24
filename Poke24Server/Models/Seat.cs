@@ -17,6 +17,8 @@ namespace Poke24Server.Models
 
         public List<Card> InHand { get; set; }
 
+        public bool IsFinish { get; set; }
+
         public Seat()
         {
             InHand = new List<Card>();
