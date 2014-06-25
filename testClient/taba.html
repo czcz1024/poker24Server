@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="Content/font-awesome.css" rel="stylesheet" />
+    <style>
+        *{ padding:0; margin:0;}
+        ul,li{ list-style:none}
+        html,body{ height:100%; }
+
+        body{
+            height:100%;
+            width:100%;
+            overflow-x:hidden;
+            background-color:black;
+        }
+        .tools {
+            position: fixed;
+            bottom: 0px;
+            display:none;
+        }
+        .tools ul li {
+            
+        }
+        .tools ul a {
+            text-align: center;
+        }
+        
+        .nowcards {
+            min-height: 50px;
+            height:100px;
+            width:100%;
+            margin:0 auto;
+            background-color:#b0f0ba;
+            padding-top:5px;
+            padding-bottom:5px;
+        }
+        .nowcards li {
+            border:1px solid blue
+        }
+        .options{
+            height:10%;
+            min-height:35px;
+        }
+        .inhand {
+            min-height: 50px;
+            
+            background-color: rgb(253, 243, 76);
+            width:100%;
+            margin:0 auto;
+            padding-top:5px;
+            padding-bottom:5px;
+        }
+        .inhand li {
+            border: 1px solid green;
+        }
+
+        .card{
+            float:left;
+            width:45px;
+            height:60px;
+            background-color:white;
+            text-align:center;
+        }
+        .card-small{
+            float:left;
+            width:30px;
+            height:40px;
+            background-color:white;
+            text-align:center;
+        }
+        .choose{
+            position:absolute;
+            width:98%;
+            margin:0 auto;
+            background-color:green;
+            bottom:10px;
+            display:none;
+        }
+        .seat{
+            padding-top:5px;
+            width:15%;
+            float:left;
+            text-align:center;
+            height:100%;
+            font-size: 12px;
+        }
+        .seats{
+            width:100%;
+            height:50px;
+            min-height:35px;
+            margin:0 auto;
+            background-color:#e0e0e0;
+            color:rgb(61, 151, 255);
+        }
+        .nowpusher{
+            background-color:yellow;
+        }
+        .lastpusher{
+            color:red;
+        }
+        .nowpusher.lastpusher{
+            color:red;
+        }
+        
+    </style>
+</head>
+    <body>
+        
+        <div class="row seats">
+            <ul class="col-xs-12">
+                <li class="seat"><i class="fa fa-user fa-2x"></i><br />王麻子</li>
+                <li class="seat lastpusher nowpusher"><i class="fa fa-user fa-2x"></i><br />王麻子</li>
+                <li class="seat nowpusher"><i class="fa fa-user fa-2x"></i><br />王麻子</li>
+                <li class="seat lastpusher"><i class="fa fa-user fa-2x"></i><br />王麻子</li>
+            </ul>
+        </div>
+        <div class="row nowcards">
+            <ul class="col-xs-12">
+                <li class="card-small">2</li>
+                <li class="card-small">3</li>
+                <li class="card-small">4</li>
+                <li class="card-small">5</li>
+                <li class="card-small">6</li>
+                <li class="card-small">7</li>
+                <li class="card-small">8</li>
+                <li class="card-small">9</li>
+                <li class="card-small">A</li>
+                <li class="card-small">10</li>
+                <li class="card-small">J</li>
+                <li class="card-small">Q</li>
+                <li class="card-small">K</li>
+                <li class="card-small">A</li>
+            </ul>
+        </div>
+        
+        <div class="row inhand">
+            <ul class="col-xs-12">
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+                <li class="card">A</li>
+            </ul>
+        </div>
+        <div class="row options">
+            <div class="col-xs-12">
+                <button class="col-xs-4 btn btn-primary" id="beginBtn">Begin</button>
+                <button class="col-xs-4 btn btn-primary" id="pushBtn">Push</button>
+                <button class="col-xs-4 btn btn-primary" id="passBtn">Pass</button>
+            </div>
+
+        </div>
+
+        <div id="block" class="choose">
+            <ul>
+                <li>12345</li>
+                <li>12345</li>
+                <li>12345</li>
+            </ul>
+            <button>ok</button>
+        </div>
+
+        <div class="row tools">
+            <ul>
+                <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
+                <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
+                <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
+                <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
+                
+            </ul>
+        </div>
+
+        <script src="Scripts/jquery-2.1.1.js"></script>
+        <script src="Scripts/bootstrap.js"></script>
+    </body>
+</html>
