@@ -1,6 +1,7 @@
 ﻿//js file
 var app = {
-    apiBaseUrl:"http://localhost:1234/"
+    //apiBaseUrl:"http://localhost:1234/"
+    apiBaseUrl:"http://192.168.1.103:1432/"
 };
 
 $(function () {

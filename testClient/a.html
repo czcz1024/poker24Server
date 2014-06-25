@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="poke24">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="Scripts/angular.js"></script>
+</head>
+<body>
+    <div ng-controller="seatsCtrl">
+        <ul>
+            <li ng-repeat="item in data">
+                <a id="{{item.id}}">{{item.cnt}}</a>
+                <button ng-click="log()">aaa</button>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        var app = angular.module("poke24", []);
+        var data = [
+            { id: 1, cnt: 1 },
+            { id: 2, cnt: 2 },
+            { id: 3, cnt: 3 }
+        ];
+        app.factory("Data", function () {
+            return data;
+        });
+
+        app.controller("seatsCtrl", function ($scope, Data) {
+            $scope.data = Data;
+
+            $scope.update = function (data) {
+                $scope.data = data;
+                $scope.$apply();
+            }
+        });
+
+        function update() {
+            var ele = document.querySelector("[ng-controller=seatsCtrl]");
+            angular.element(ele).scope().update([
+                    { id: 1, cnt: 7 },
+                    { id: 3, cnt: 8 },
+                    { id: 2, cnt: 9 }
+            ]);
+        }
+
+        //app.controller("seatsCtrl", function ($scope) {
+        //    $scope.data = [
+        //        { id: 1, cnt: 1 },
+        //        { id: 2, cnt: 2 },
+        //        { id: 3, cnt: 3 }
+                
+        //    ];
+
+        //    $scope.update = function (data) {
+        //        $scope.data = data;
+        //        console.log("u");
+        //    };
+
+        //    $scope.log = function () {
+        //        console.log("1");
+        //    };
+        //});
+
+        //function change() {
+        //    var appElement = document.querySelector('[ng-controller=seatsCtrl]');
+        //    var $scope = angular.element(appElement).scope();
+        //    $scope.$apply(function () {
+        //        var x = this;
+        //        $scope.data = [
+        //            { id: 1, cnt: 4 },
+        //            { id: 3, cnt: 5 },
+        //            { id: 2, cnt: 6 }
+        //        ];
+        //    });
+        //}
+
+        //function call() {
+        //    var ele = document.querySelector("[ng-controller=seatsCtrl]");
+        //    angular.element(ele).scope().log();
+        //}
+
+        //function update() {
+        //    var ele = document.querySelector("[ng-controller=seatsCtrl]");
+        //    angular.element(ele).scope().update([
+        //        { id: 1, cnt: 7 },
+        //        { id: 3, cnt: 8 },
+        //        { id: 2, cnt: 9 }
+        //    ]);
+        //}
+    </script>
+</body>
+</html>

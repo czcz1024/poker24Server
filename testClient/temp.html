@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/font-awesome.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="seats">
+        
+    </div>
+    <script id="seatsTemp" type="text/x-handlebars-template">
+        <ul>
+            {{#each seats}}
+            <li>
+                <a id="{{id}}">{{cnt}} p</a>
+            </li>
+            {{/each}}
+        </ul>
+    </script>
+    <script src="Scripts/jquery-2.1.1.js">
+    </script>
+    <script src="Scripts/handlebars-v1.3.0.js"></script>
+    <script>
+        var model = {
+            seats: [
+                {id:1,cnt:1},
+                {id:2,cnt:2},
+                {id:3,cnt:3},
+                {id:4,cnt:4}
+            ]
+        };
+        $(function () {
+            //$("#seats").html(genTemp("#seatsTemp", model));
+            genTempHtml("#seatsTemp", model);
+        });
+
+        function genTemp(id, data) {
+            var source = $(id).html();
+            var template = Handlebars.compile(source);
+            var html = template(data);
+            return html;
+        }
+
+        function genTempHtml(id, data) {
+            var obj = $(id);
+            var html = genTemp(id, data);
+            obj.parent().html(html);
+        }
+    </script>
+</body>
+</html>
