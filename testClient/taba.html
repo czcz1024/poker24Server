@@ -20,6 +20,8 @@
         .tools {
             position: fixed;
             bottom: 0px;
+            background-color:black;
+            width:100%;
             display:none;
         }
         .tools ul li {
@@ -31,7 +33,7 @@
         
         .nowcards {
             min-height: 50px;
-            height:100px;
+            
             width:100%;
             margin:0 auto;
             background-color:#b0f0ba;
@@ -44,10 +46,12 @@
         .options{
             height:10%;
             min-height:35px;
+            bottom:0;
+            width:90%;
+            margin:0 auto;
         }
         .inhand {
             min-height: 50px;
-            
             background-color: rgb(253, 243, 76);
             width:100%;
             margin:0 auto;
@@ -73,11 +77,14 @@
             text-align:center;
         }
         .choose{
-            position:absolute;
-            width:98%;
+            position:fixed;
+            left:50%;
             margin:0 auto;
+            margin-left:-45%;
+            width:90%;
+            
             background-color:green;
-            bottom:10px;
+            bottom:20px;
             display:none;
         }
         .seat{
@@ -168,7 +175,7 @@
                 <li class="card">A</li>
             </ul>
         </div>
-        <div class="row options">
+        <div class="options">
             <div class="col-xs-12">
                 <button class="col-xs-4 btn btn-primary" id="beginBtn">Begin</button>
                 <button class="col-xs-4 btn btn-primary" id="pushBtn">Push</button>
@@ -183,11 +190,11 @@
                 <li>12345</li>
                 <li>12345</li>
             </ul>
-            <button>ok</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn">ok</button>
         </div>
 
-        <div class="row tools">
-            <ul>
+        <div class=" tools">
+            <ul class="col-xs-12">
                 <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
                 <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
                 <li class="col-xs-3"><a href=""><i class="fa fa-cog fa-3x"></i></a></li>
