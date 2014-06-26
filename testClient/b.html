@@ -1,139 +1,233 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta name="viewport" content="width=320px,height=480px,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title></title>
-        <style>
-            * {
-                padding: 0;
-                margin: 0;
-            }
-            html,body {
-                height: 100%;
-            }
-            .players {
-                width: 100%;
-                height: 10%;
-                background-color: green;
-            }
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="poke">
+<head>
+    <meta name="viewport" content="width=320px,height=480px,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .players {
+            width: 100%;
+            height: 10%;
+            background-color: green;
+        }
 
             .players li {
                 float: left;
                 height: 100%;
                 width: 15%;
             }
-            .options {
-                width: 100%;
-                height: 15%;
-                background-color: yellow;
-            }
-            .pushes {
-                width: 100%;
-                height: 30%;
-                background-color: blue;
-            }
-            
-            .inhand {
-                width: 100%;
-                height: 45%;
-                background-color: red;
+
+        .options {
+            width: 100%;
+            height: 15%;
+            background-color: yellow;
+        }
+
+        .pushes {
+            width: 100%;
+            height: 30%;
+            background-color: blue;
+        }
+
+        .inhand {
+            width: 100%;
+            height: 45%;
+            background-color: red;
+        }
+
+        .card, .card1 {
+            text-align: center;
+            background-color: white;
+            border: 1px solid blue;
+        }
+
+        .card {
+            width: 80px;
+            height: 120px;
+            float: left;
+        }
+
+        .card1 {
+            width: 80px;
+            height: 120px;
+            float: left;
+        }
+
+        @media screen and (max-width: 360px) {
+            .card {
+                width: 40px;
+                height: 60px;
+                float: left;
             }
 
-            .card,.card1 {
-                text-align: center;
-                background-color: white;
-                border: 1px solid blue;
+            .card1 {
+                width: 40px;
+                height: 60px;
+                float: left;
             }
-            @media screen and (max-width: 360px) {
-                .card {
-                    width: 40px;
-                    height: 60px;
-                    float: left;
-                }
-                 .card1 {
-                     width: 40px;
-                     height: 60px;
-                     float: left;
-                }
-                
+        }
+
+        @media screen and (max-width: 320px) {
+            .card {
+                width: 30px;
+                height: 40px;
+                float: left;
             }
 
-            @media screen and (max-width: 320px) {
-                .card {
-                    width: 30px;
-                    height: 40px;
-                    float: left;
-                }
-                 .card1 {
-                    width: 30px;
-                    height: 40px;
-                    float: left;
-                }
-                
+            .card1 {
+                width: 30px;
+                height: 40px;
+                float: left;
             }
-            
-        </style>
-    </head>
-<body>
+        }
+    </style>
+    <script src="Scripts/angular.js"></script>
+</head>
+<body ng-controller="body">
     <div class="players">
         <ul>
-            <li>User</li>
-            <li>User</li>
-            <li>User</li>
-            <li>User</li>
-            <li>User</li>
-            <li>User</li>
+            <li ng-repeat="item in data.seats" id="{{item.UserId}}">{{item.UserName}}</li>
         </ul>
     </div>
     <div class="pushes">
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
-        <div class="card">A</div>
+        <div class="card" ng-repeat="item in data.lastPush" v="{{item.Value}}">{{item.Text}}</div>
     </div>
     <div class="inhand">
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
-        <div class="card1">A</div>
+        <div class="card1" ng-repeat="item in data.you.inHand" v="{{item.Value}}">{{item.Text}}</div>
     </div>
     <div class="options">
         <script>
             document.write("w:" + window.screen.width + ",h:" + window.screen.height);
         </script>
+        <div ng-if="data.gameState==0">
+            <button ng-if="data.you.ready==false">ready</button>
+            <button ng-if="data.you.ready==true">wait</button>
+        </div>
+        <div ng-if="data.gameState==1">
+            <div ng-if="data.you.inturn==true">
+                <button>push</button>
+                <button>pass</button>
+            </div>
+            <div ng-if="data.you.inturn==false">
+                <button>wait</button>
+            </div>
+        </div>
+        <div ng-if="data.gameState==2">
+            <button>finish</button>
+        </div>
     </div>
+    
+    <script src="Scripts/jquery-2.1.1.js"></script>
+    <script src="http://localhost:1432/scripts/jquery.signalR-2.1.0.js"></script>
+    <script src="http://localhost:1432/signalr/hubs"></script>
+    <script>
+        var state = {
+            WaitForUserReady: 0,
+            WaitForUserSay: 1,
+            Finish: 2
+        };
+        var game = {
+            uid: "",
+            tabid:"",
+            seats: [],
+            you: {
+                inHand: [],
+                ready: false,
+                inturn: false
+            },
+            lastPush: [],
+            lastBigUser: "",
+            nowSpeaker: "",
+            gameState: 1
+        };
+        var app = angular.module("poke", []);
+
+        app.controller("body", function ($scope) {
+            var uid = localStorage.getItem("uid");
+            var tabid = localStorage.getItem("tabid");
+            if (uid == null) {
+                location.href = "login.html";
+            }
+            if (tabid == null) {
+                location.href = "list.html";
+            }
+            game.uid = uid;
+            game.tabid = tabid;
+            connectToServer($scope);
+            $scope.update = function (data) {
+                $scope.data = data;
+                $scope.$apply();
+            };
+        });
+
+        
+
+        function update(ctrl, data) {
+            var obj = document.querySelector("[ng-controller=" + ctrl + "]");
+            var ele = angular.element(obj);
+            ele.scope().update(data);
+        }
+        function connectToServer($scope) {
+            var url = "http://192.168.1.103:1432/";
+            $.connection.hub.qs = { "tab": game.tabid, "uid": game.uid };
+
+            app.proxy = $.connection.tabHub;
+            $.connection.hub.error(function (error) {
+                console.log('SignalR error: ' + error);
+            });
+            $.connection.hub.url = url + "signalr";
+
+            var client = $.connection.tabHub.client;
+            setClientFunc(client,$scope);
+            $.connection.hub.start();
+        }
+
+        function setClientFunc(client, $scope) {
+            client.test = function(txt) {
+                console.log(txt);
+            };
+            client.err = function (msg) {
+                console.log(msg);
+            };
+
+            client.refreshInfo = function (tab) {
+                fillData(tab);
+                $scope.update(game);
+            };
+
+            client.refreshUsers = function(users) {
+                fillUser(users);
+                $scope.update(game);
+            };
+            client.refreshYou = function (you) {
+                fillyou(you);
+                $scope.update(game);
+            };
+        }
+
+        function fillData(tab) {
+            game.lastPush = tab.LastHand;
+            game.gameState = tab.State;
+            game.lastBigUser = tab.BigUser;
+        }
+
+        function fillUser(users) {
+            game.seats = users;
+        }
+
+        function fillyou(you) {
+            game.you = you;
+        }
+
+    </script>
 </body>
 </html>

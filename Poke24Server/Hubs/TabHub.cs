@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNet.SignalR;
 
+    using Poke24Server.Logic;
     using Poke24Server.Models;
 
     public class TabHub:Hub
@@ -14,24 +16,63 @@
         {
             var tab = this.Context.QueryString["tab"];
             var uid = this.Context.QueryString["uid"];
-            Groups.Add(Context.ConnectionId, tab);
+            Clients.Caller.test(Context.ConnectionId+" conn to "+tab);
+            var t1=Groups.Add(Context.ConnectionId, tab);
+            var t2=Groups.Add(Context.ConnectionId, tab + "_" + uid);
+            Task.WaitAll(t1, t2);
 
-            var id = Guid.Parse(tab);
-            var userid = Guid.Parse(uid);
-            var game = GameViewModel.GetGame(id);
-            if (game != null)
+            var tabid = Guid.Parse(tab);
+            var uguid = Guid.Parse(uid);
+
+            if (EnterTab(tabid, uguid))
             {
-                game.Join(userid);
-
-                game.SaveCache();
+                RefreshInfo(tabid);
+                RefreshUsers(tabid);
+                RefreshYou(tabid, uguid);
+            }
+            else
+            {
+                Clients.Caller.err("full");
             }
 
-            RefreshSeats(id);
-            if (game.Seats.All(x => x.IsOK))
-            {
-                RefreshGame(id);
-            }
             return base.OnConnected();
+        }
+
+        private void RefreshYou(Guid tabid, Guid uguid)
+        {
+            var tab = Tab.GetTab(tabid);
+            if (tab.Info.State == 1)
+            {
+                var hand = tab.Users.FirstOrDefault(x => x.UserId == uguid);
+                if (hand != null)
+                {
+                    var you = new { 
+                        InHand=hand.InHand,
+                        Ready=hand.IsOk,
+                        Finish=hand.IsFinish,
+                        Turn=hand.UserId==tab.Info.WaitUser
+                    };
+                    Clients.Group(tabid.ToString() + "_" + uguid.ToString()).refreshYou(you);
+                }
+            }
+        }
+
+        private void RefreshUsers(Guid tabid)
+        {
+            var tab = Tab.GetTab(tabid);
+            var us = tab.Users.Select(x => new Seat { 
+                IsFinish=x.IsFinish,
+                IsOk=x.IsOk,
+                UserId=x.UserId,
+                UserName=x.UserName
+            });
+            Clients.Group(tabid.ToString()).refreshUsers(us);
+        }
+
+        private void RefreshInfo(Guid tabid)
+        {
+            var tab = Tab.GetTab(tabid);
+            Clients.Group(tabid.ToString()).refreshInfo(tab.Info);
         }
 
         public override System.Threading.Tasks.Task OnReconnected()
@@ -42,77 +83,18 @@
 
         public override System.Threading.Tasks.Task OnDisconnected()
         {
+            var tab = this.Context.QueryString["tab"];
+            var uid = this.Context.QueryString["uid"];
+            Groups.Remove(Context.ConnectionId, tab);
+            Groups.Remove(Context.ConnectionId, tab+"_"+uid);
             return base.OnDisconnected();
 
         }
 
-        public void Ready(Guid id,Guid uid)
+        public bool EnterTab(Guid tabid, Guid uid)
         {
-            var game = GameViewModel.GetGame(id);
-            var u = game.Seats.FirstOrDefault(x => x.UserId == uid && !x.IsOK);
-            if (u != null)
-            {
-                u.IsOK = true;
-                game.SaveCache();
-                RefreshSeats(id);
-                Clients.Caller.test("is ready");
-                if (game.Seats.All(x => x.IsOK))
-                {
-                    BeginGame(id);
-                }
-            }
-            Clients.Caller.test("on ready");
-        }
-
-        public void Pass()
-        {
-        }
-
-        public void Poke(Guid id,Guid uid,string hand)
-        {
-            var game = GameViewModel.GetGame(id);
-            game.Poke(uid, hand);
-            game.SaveCache();
-            RefreshGame(id);
-        }
-
-        public void BeginGame(Guid id)
-        {
-            Clients.Caller.test("begin");
-            var game = GameViewModel.GetGame(id);
-            game.BeginNew();
-            game.SaveCache();
-            RefreshGame(id);
-        }
-
-        private void RefreshGame(Guid id)
-        {
-            var tab = id.ToString();
-            var game = GameViewModel.GetGame(id);
-            if (game == null)
-            {
-                Clients.Caller.test("no game");
-            }
-            else
-            {
-                //Clients.Groups(new List<string> { tab }).refreshGame(game.Seats);
-                Clients.Group(tab).refreshGame(game);
-            }
-        }
-
-        public void RefreshSeats(Guid id)
-        {
-            var tab = id.ToString();
-            var game = GameViewModel.GetGame(id);
-            if (game == null)
-            {
-                Clients.Caller.test("no game");
-            }
-            else
-            {
-                //Clients.Groups(new List<string> { tab }).refreshUsers(game.Seats);
-                Clients.Group(tab).refreshUsers(game.Seats);
-            }
+            var tab = Tab.GetTab(tabid);
+            return tab.UserEnter(uid);
         }
     }
 }

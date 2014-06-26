@@ -20,6 +20,7 @@ namespace Poke24Server
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+
         }
     }
 }

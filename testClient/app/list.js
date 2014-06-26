@@ -44,5 +44,5 @@ function createTab() {
 
 function gotab(id) {
     localStorage.setItem("tabid", id);
-    location.href = "tab.html";
+    location.href = "b.html";
 }
