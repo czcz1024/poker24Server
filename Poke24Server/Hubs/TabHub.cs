@@ -41,20 +41,20 @@
         private void RefreshYou(Guid tabid, Guid uguid)
         {
             var tab = Tab.GetTab(tabid);
-            if (tab.Info.State == 1)
+            
+            var hand = tab.Users.FirstOrDefault(x => x.UserId == uguid);
+            if (hand != null)
             {
-                var hand = tab.Users.FirstOrDefault(x => x.UserId == uguid);
-                if (hand != null)
-                {
-                    var you = new { 
-                        InHand=hand.InHand,
-                        Ready=hand.IsOk,
-                        Finish=hand.IsFinish,
-                        Turn=hand.UserId==tab.Info.WaitUser
-                    };
-                    Clients.Group(tabid.ToString() + "_" + uguid.ToString()).refreshYou(you);
-                }
+                var t = tab.Info.WaitUser == uguid;
+                var you = new { 
+                    InHand=hand.InHand,
+                    Ready=hand.IsOk,
+                    Finish=hand.IsFinish,
+                    Turn=t
+                };
+                Clients.Group(tabid.ToString() + "_" + uguid.ToString()).refreshYou(you);
             }
+            
         }
 
         private void RefreshUsers(Guid tabid)
@@ -95,6 +95,20 @@
         {
             var tab = Tab.GetTab(tabid);
             return tab.UserEnter(uid);
+        }
+
+        public void Ready(Guid tabid, Guid uid)
+        {
+            var tab = Tab.GetTab(tabid);
+            var seat = tab.GetUser(uid);
+            seat.IsOk = true;
+            RefreshUsers(tabid);
+            if (tab.Users.All(x => x.IsOk))
+            {
+                tab.Start();
+                RefreshInfo(tabid);
+            }
+            RefreshYou(tabid, uid);
         }
     }
 }

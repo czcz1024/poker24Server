@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="a.html" />
+    <Content Include="app\rules.js" />
     <Content Include="b.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />

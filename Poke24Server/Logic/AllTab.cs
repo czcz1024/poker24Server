@@ -1,4 +1,6 @@
-﻿namespace Poke24Server.Logic
+﻿using System.Collections.Concurrent;
+
+namespace Poke24Server.Logic
 {
     using System;
     using System.Collections.Generic;
@@ -8,11 +10,11 @@
 
     public class AllTab
     {
-        public static Dictionary<Guid, Tab> All { get; set; }
+        public static ConcurrentDictionary<Guid, Tab> All { get; set; }
 
         static AllTab()
         {
-            All = new Dictionary<Guid, Tab>();
+            All = new ConcurrentDictionary<Guid, Tab>();
         }
 
     }
@@ -50,7 +52,7 @@
             if (!AllTab.All.ContainsKey(id))
             {
                 var obj = new Tab(id);
-                AllTab.All.Add(id, obj);
+                AllTab.All.TryAdd(id, obj);
             }
             return AllTab.All[id];
         }
@@ -73,6 +75,40 @@
             seat.IsOk = false;
             seat.IsFinish = false;
             return true;
+        }
+
+        public Seat GetUser(Guid uid)
+        {
+            var u = Users.FirstOrDefault(x => x.UserId == uid);
+            if (u == null) throw new Exception("not have this user");
+            return u;
+        }
+
+        public void Start()
+        {
+            initCard();
+            this.Info.WaitUser = Info.OwnerId;
+            Info.State = 1;
+            
+        }
+
+        private void initCard()
+        {
+            var all = Card.SetOfCard();
+            all=all.OrderBy(x=>Guid.NewGuid()).ToList();
+
+            int i = 0;
+            foreach (var item in all)
+            {
+                Users[i].InHand.Add(item);
+                i++;
+                if (i >= Users.Count) i = 0;
+            }
+
+            foreach (var u in Users)
+            {
+                u.InHand = u.InHand.OrderByDescending(x => x.Value).ToList();
+            }
         }
     }
 
@@ -104,6 +140,11 @@
         public bool IsFinish { get; set; }
 
         public List<Card> InHand { get; set; }
+
+        public Seat()
+        {
+            InHand = new List<Card>();
+        }
     }
 
     public class Card
@@ -112,6 +153,45 @@
 
         public int Value { get; set; }
 
+        public Card(int v)
+        {
+            this.Value = v;
+            this.Text = map[v];
+        }
 
+        public static Dictionary<int, string> map = new Dictionary<int, string>();
+
+        static Card ()
+        {
+            map.Add(1, "A");
+            for (var i = 2; i <= 10; i++)
+            {
+                map.Add(i, i.ToString());
+            }
+
+            map.Add(11, "J");
+            map.Add(12, "Q");
+            map.Add(13, "K");
+            map.Add(14, "A");
+            map.Add(15, "2");
+
+            map.Add(21, "XW");
+            map.Add(22, "DW");
+        }
+
+        public static List<Card> SetOfCard()
+        {
+            var list = new List<Card>();
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 3; j <= 15; j++)
+                {
+                    list.Add(new Card(j));
+                }
+            }
+            list.Add(new Card(21));
+            list.Add(new Card(22));
+            return list;
+        }
     }
 }
