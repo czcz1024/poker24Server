@@ -66,6 +66,18 @@
             float: left;
         }
 
+        .may{
+            background-color:rgb(145, 242, 244);
+            width:100%;
+            bottom:0;
+            position:fixed;
+            height:70%;
+        }
+        .mayoption{
+            width:100%;
+            height:20%;
+        }
+
         @media screen and (max-width: 360px) {
             .card {
                 width: 40px;
@@ -111,6 +123,12 @@
     <div class="inhand">
         <div class="card1" ng-repeat="item in data.you.inHand" v="{{item.Value}}" onclick="tg(this)">{{item.Text}}</div>
     </div>
+    <div class="may" ng-if="data.showmay==true">
+        <div class="mayoption" ng-repeat="item in data.may" v="{{item.Value}}">
+            {{item.Text}}
+            <button onclick="push2server(this)">choose</button>
+        </div>
+    </div>
     <div class="options">
         <script>
             document.write("w:" + window.screen.width + ",h:" + window.screen.height);
@@ -155,7 +173,10 @@
             lastPush: [],
             lastBigUser: "",
             nowSpeaker: "",
-            gameState: 1
+            gameState: 1,
+            showmay: false,
+            may: [],
+            realpush:[]
         };
         var app = angular.module("poke", []);
 
@@ -260,15 +281,28 @@
             }
         }
 
-        function pushCards(cards) {
+        function pushCards($scope, proxy,cards) {
             var arr = cards.map(function () { return $(this).attr("v"); }).get(0);
-
+            game.realpush = arr;
             var may = rules.may(arr);
             if (may.length == 1) {
                 push2server(may[0], arr);
             }
-            game.waitpushCards = arr;
+            game.showmay = true;
+            game.may = may.map(function (item) {
+                return {
+                    Value: item,
+                    Text:cards2str(item)
+                };
+            });
+
+            $scope.update(game);
+
             showOption(may);
+        }
+
+        function cards2str(arr) {
+            return arr.join(',').replace("11", "J").replace("12", "Q").replace("13", "K").replace("14", "A");
         }
 
         function push2server(arr, real) {
