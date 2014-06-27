@@ -15,6 +15,7 @@ rules.isPair = function(arr) {
 rules.isSingle = function (arr) { return arr.length == 1; };
 
 rules.isSeq = function (arr) {
+	if(arr.length<3) return false;
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] >14 || arr[i]<1) {
             return false;
