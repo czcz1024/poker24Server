@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" ng-app="poke">
 <head>
-    <meta name="viewport" content="width=320px,height=480px,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <style>
@@ -124,9 +124,9 @@
         <div class="card1" ng-repeat="item in data.you.inHand" v="{{item.Value}}" onclick="tg(this)">{{item.Text}}</div>
     </div>
     <div class="may" ng-if="data.showmay==true">
-        <div class="mayoption" ng-repeat="item in data.may" v="{{item.Value}}">
+        <div class="mayoption" ng-repeat="item in data.may">
             {{item.Text}}
-            <button onclick="push2server(this)">choose</button>
+            <button onclick="push2server(this)" v="{{item.Value}}">choose</button>
         </div>
     </div>
     <div class="options">
@@ -152,8 +152,9 @@
     </div>
     
     <script src="Scripts/jquery-2.1.1.js"></script>
-    <script src="http://localhost:1432/scripts/jquery.signalR-2.1.0.js"></script>
+    <script src="Scripts/jquery.signalR-2.1.0.js"></script>
     <script src="http://localhost:1432/signalr/hubs"></script>
+    <script src="app/rules.js"></script>
     <script>
         var state = {
             WaitForUserReady: 0,
@@ -221,6 +222,7 @@
             $.connection.hub.qs = { "tab": game.tabid, "uid": game.uid };
 
             var proxy = $.connection.tabHub;
+            game.proxy = proxy;
             $.connection.hub.error(function (error) {
                 console.log('SignalR error: ' + error);
             });
@@ -282,37 +284,41 @@
         }
 
         function pushCards($scope, proxy,cards) {
-            var arr = cards.map(function () { return $(this).attr("v"); }).get(0);
+            var arr = cards.map(function () { return parseInt($(this).attr("v")); }).get();
             game.realpush = arr;
             var may = rules.may(arr);
+            
             if (may.length == 1) {
-                push2server(may[0], arr);
+                send2server(may[0], arr);
+                return;
             }
             game.showmay = true;
             game.may = may.map(function (item) {
                 return {
                     Value: item,
-                    Text:cards2str(item)
+                    Text: cards2str(item)
                 };
             });
 
-            $scope.update(game);
-
-            showOption(may);
+            //$scope.update(game);
         }
 
         function cards2str(arr) {
             return arr.join(',').replace("11", "J").replace("12", "Q").replace("13", "K").replace("14", "A");
         }
 
-        function push2server(arr, real) {
-            //check and if pass,post to server
+        function push2server(obj) {
+            var real = game.realpush;
+            var v = eval($(obj).attr("v"));
+            send2server(v, real);
+            game.showmay = false;
+            update("body", game);
         }
 
-        function showOption(may) {
-            //show list of options
+        function send2server(arr, real) {
+            console.log(2);
+            $.connection.tabHub.server.push(game.tabid, game.uid, arr, real);
         }
-
     </script>
 </body>
 </html>

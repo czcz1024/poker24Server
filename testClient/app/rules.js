@@ -133,10 +133,17 @@ rules.mayW = function (arr) {
     if (rules.allSame(rest)) {
         //w->boom
         var num = rest[0];
-        for (var i = 0; i < dwcnt + xwcnt; i++) {
-            rest.push(num);
+        if (num == 2) {
+            num = 15;
         }
-        return [rest];
+        if (num == 1) {
+            num = 14;
+        }
+        var newboom = [];
+        for (var i = 0; i < dwcnt + xwcnt+rest.length; i++) {
+            newboom.push(num);
+        }
+        return [newboom];
     }
     return rules.wInSeq(rest, dwcnt + xwcnt);
 }
@@ -144,9 +151,12 @@ rules.mayW = function (arr) {
 rules.wAnd1 = function (num, wcnt) {
     var r = [];
     //boom
-    var boom = [num];
+    var boomnum = num;
+    if (boomnum == 2) boomnum = 15;
+    if (boomnum == 1) boomnum = 14;
+    var boom = [boomnum];
     for (var i = 0; i < wcnt; i++) {
-        boom.push(num);
+        boom.push(boomnum);
     }
     r.push(boom);
 
@@ -188,7 +198,20 @@ rules.getWseq1 = function (num, wcnt) {
     //    }
     //}
     //return r;
-    return rules.getWseq([num], wcnt);
+    var r = rules.getWseq([num], wcnt);
+    if (num == 15) {
+        var r2 = rules.getWseq([2], wcnt);
+        for (var i = 0; i < r2.length; i++) {
+            r.push(r2[i]);
+        }
+    }
+    if (num == 1) {
+        var r2 = rules.getWseq([14], wcnt);
+        for (var i = 0; i < r2.length; i++) {
+            r.push(r2[i]);
+        }
+    }
+    return r;
 }
 
 rules.getWseq = function (seq, wcnt) {

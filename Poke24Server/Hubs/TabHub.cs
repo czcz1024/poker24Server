@@ -110,5 +110,17 @@
             }
             RefreshYou(tabid, uid);
         }
+
+        public void Push(Guid tabid, Guid uid, IEnumerable<int> card, IEnumerable<int> real)
+        {
+            string txt = uid + " has push cards to " + tabid + ":"
+                         + card.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + "(" + real.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + ")";
+            Clients.Caller.test(txt);
+        }
+
+        public void Pass(Guid tabid, Guid uid)
+        {
+
+        }
     }
 }
