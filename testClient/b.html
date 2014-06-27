@@ -204,7 +204,7 @@
 
             $scope.push = function() {
                 var cards = $(".inhand .choose");
-                console.log(cards);
+                
 
                 pushCards($scope, proxy, cards);
             };
@@ -271,14 +271,13 @@
         }
 
         function fillyou(you) {
-            console.log(you);
+            
             game.you.inHand = you.InHand;
             game.you.ready = you.Ready;
             game.you.inturn = you.Turn;
         }
         function tg(item) {
             if (game.you.inturn) {
-                console.log(item);
                 $(item).toggleClass("choose");
             }
         }
@@ -287,24 +286,45 @@
             var arr = cards.map(function () { return parseInt($(this).attr("v")); }).get();
             game.realpush = arr;
             var may = rules.may(arr);
-            
+            var last = game.lastPush.map(function (item) { return item.Value; });
             if (may.length == 1) {
-                send2server(may[0], arr);
+                if (game.lastPush != null && game.lastPush.length>0) {
+                    
+                    if (rules.isBiger(last, may[0],arr)) {
+                        send2server(may[0], arr);
+                    }
+                } else {
+                    send2server(may[0], arr);
+                }
                 return;
             }
-            game.showmay = true;
-            game.may = may.map(function (item) {
-                return {
-                    Value: item,
-                    Text: cards2str(item)
-                };
-            });
+            
+            var bigmay = [];
+            if (game.lastPush == null || game.lastPush.length==0) {
+                bigmay = may;
+            } else {
+                for (var i = 0; i < may.length; i++) {
+                    if (rules.isBiger(last, may[i],arr)) {
+                        bigmay.push(may[i]);
+                    }
+                }
+            }
+
+            if (bigmay.length > 0) {
+                game.showmay = true;
+                game.may = bigmay.map(function(item) {
+                    return {
+                        Value: item,
+                        Text: cards2str(item)
+                    };
+                });
+            }
 
             //$scope.update(game);
         }
 
         function cards2str(arr) {
-            return arr.join(',').replace("11", "J").replace("12", "Q").replace("13", "K").replace("14", "A");
+            return arr.join(',').replace(/11/g, "J").replace(/12/g, "Q").replace(/13/g, "K").replace(/14/g, "A");
         }
 
         function push2server(obj) {
@@ -316,7 +336,7 @@
         }
 
         function send2server(arr, real) {
-            console.log(2);
+            
             $.connection.tabHub.server.push(game.tabid, game.uid, arr, real);
         }
     </script>

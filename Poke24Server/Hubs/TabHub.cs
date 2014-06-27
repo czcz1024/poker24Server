@@ -116,11 +116,20 @@
             string txt = uid + " has push cards to " + tabid + ":"
                          + card.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + "(" + real.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + ")";
             Clients.Caller.test(txt);
+
+            var tab = Tab.GetTab(tabid);
+            tab.Push(uid,card, real);
+            RefreshInfo(tabid);
+            RefreshUsers(tabid);
+            RefreshYou(tabid, uid);
         }
 
         public void Pass(Guid tabid, Guid uid)
         {
-
+            var tab = Tab.GetTab(tabid);
+            tab.Pass(uid);
+            RefreshInfo(tabid);
+            RefreshUsers(tabid);
         }
     }
 }

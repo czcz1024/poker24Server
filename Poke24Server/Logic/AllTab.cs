@@ -40,7 +40,7 @@ namespace Poke24Server.Logic
                     Info.LastHand = new List<Card>();
                     for (var i = 0; i < Info.UserCnt; i++)
                     {
-                        Users.Add(new Seat { });
+                        Users.Add(new Seat {Index=i });
                     }
                 }
                 
@@ -110,6 +110,43 @@ namespace Poke24Server.Logic
                 u.InHand = u.InHand.OrderByDescending(x => x.Value).ToList();
             }
         }
+
+        public void Pass(Guid uid)
+        {
+            SetNextUser();
+        }
+
+        public void Push(Guid uid, IEnumerable<int> card, IEnumerable<int> real)
+        {
+            var u = GetUser(uid);
+            foreach (var item in real)
+            {
+                var c = u.InHand.FirstOrDefault(x => x.Value == item);
+                if (c == null) throw new Exception("you don't have this card");
+                u.InHand.Remove(c);
+            }
+
+            if (!u.InHand.Any())
+            {
+                SetUserFinish(uid);
+            }
+
+            Info.LastHand = card.Select(x=>new Card(x)).ToList();
+            Info.BigUser = uid;
+
+            SetNextUser();
+        }
+
+        private void SetNextUser()
+        {
+            var nowpush = Info.WaitUser;
+            //todo check 44 for boom
+        }
+
+        private void SetUserFinish(Guid uid)
+        {
+            //todo
+        }
     }
 
     public class TabInfo
@@ -131,6 +168,8 @@ namespace Poke24Server.Logic
 
     public class Seat
     {
+        public int Index { get; set; }
+
         public Guid UserId { get; set; }
 
         public string UserName { get; set; }
