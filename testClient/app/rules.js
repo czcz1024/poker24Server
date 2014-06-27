@@ -26,7 +26,7 @@ rules.isSeq = function (arr) {
     for (var i = 0; i < sort.length - 1; i++) {
         cha.push(sort[i + 1] - sort[i]);
     }
-    return rules.allSame(cha);
+    return rules.allSame(cha) && cha[0]==1;
 };
 
 rules.allSame = function(arr) {
@@ -336,3 +336,76 @@ rules.twoAs2= function(arr) {
     return r;
 }
 
+rules.hasBiger= function(last, hand) {
+    var card15 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (var i = 3; i <= 15; i++) {
+        var cnt = rules.count(hand, i);
+        card15[i] = cnt;
+        if (i == 14) {
+            card15[1] = cnt;
+        }
+        if (i == 15) {
+            card15[2] = cnt;
+        }
+    }
+    var dw = rules.count(hand, 22);
+    var xw = rules.count(hand, 21);
+    var bigestBoom = rules.bigestBoom(card15, dw, xw);
+    if (bigestBoom.length > 2) {
+        if (rules.isBiger(last, bigestBoom, bigestBoom)) {
+            return true;
+        }
+    }
+    if (rules.isBoom(last)) {
+        if (card15[4] >= 2) return true;
+    }
+    
+    if (rules.isSeq(last)) {
+        var seq = last.sort(function (a, b) { return a - b; });
+        var max = seq[seq.length-1];
+        var biger = 14 - max;
+        if (biger == 0) return false;
+
+        for (var i = biger; i > 0; i--) {
+            var checkseq = [];
+            for (var j = 0; j < last.length; j++) {
+                checkseq.push(last[j] + i);
+            }
+            var hascnt = 0;
+            for (var j = 0; j < checkseq.length; j++) {
+                if (card15[checkseq[j]] > 0) {
+                    hascnt++;
+                }
+            }
+            if (hascnt + xw + dw >= last.length) return true;
+        }
+    }
+
+    return false;
+}
+
+rules.bigestBoom= function(card15, dw, xw) {
+    var bnum=0;
+    var bcnt = 0;
+    var cW15 = [];
+    for (var i = 0; i < card15.length; i++) {
+        cW15.push(card15[i] + dw + xw);
+    }
+    for (var i = 3; i <= 15; i++) {
+        if (cW15[i] >= bcnt && i > bnum) {
+            bnum = i;
+            bcnt = cW15[i];
+        }
+    }
+    if (dw + xw == bcnt) {
+        bnum = 21;
+        if (dw == dw + xw) {
+            bnum = 22;
+        }
+    }
+    var r = [];
+    for (var i = 0; i < bcnt; i++) {
+        r.push(bnum);
+    }
+    return r;
+}

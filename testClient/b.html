@@ -139,8 +139,8 @@
         </div>
         <div ng-if="data.gameState==1">
             <div ng-if="data.you.inturn==true">
-                <button ng-click="push()">push</button>
-                <button>pass</button>
+                <button ng-click="push()" ng-if="data.hasbigger==true">push</button>
+                <button ng-if="data.hasbigger==false">pass</button>
             </div>
             <div ng-if="data.you.inturn==false">
                 <button>wait</button>
@@ -164,7 +164,7 @@
         var game = {
             uid: "",
             tabid: "",
-            owner:"",
+            owner: "",
             seats: [],
             you: {
                 inHand: [],
@@ -177,7 +177,8 @@
             gameState: 1,
             showmay: false,
             may: [],
-            realpush:[]
+            realpush: [],
+            hasbigger:false
         };
         var app = angular.module("poke", []);
 
@@ -264,6 +265,7 @@
             game.lastBigUser = tab.BigUser;
             game.nowSpeaker = tab.WaitUser;
             game.owner = tab.OwnerId;
+            checkHasBiger();
         }
 
         function fillUser(users) {
@@ -275,7 +277,21 @@
             game.you.inHand = you.InHand;
             game.you.ready = you.Ready;
             game.you.inturn = you.Turn;
+            checkHasBiger();
         }
+
+        function checkHasBiger() {
+            if (game.you.inturn) {
+                if (game.lastPush == null || game.lastPush.length < 1) {
+                    game.hasbigger = true;
+                } else {
+                    var lastarr = game.lastPush.map(function (item) { return parseInt(item.Value); });
+                    var inhand = game.you.inHand.map(function (item) { return parseInt(item.Value); });
+                    game.hasbigger = rules.hasBiger(lastarr, inhand);
+                }
+            }
+        }
+
         function tg(item) {
             if (game.you.inturn) {
                 $(item).toggleClass("choose");
