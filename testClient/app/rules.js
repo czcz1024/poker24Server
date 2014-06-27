@@ -85,8 +85,150 @@ rules.count= function(arr, v) {
 }
 
 rules.may= function(arr) {
-    
+    var dw = rules.count(arr, 22);
+    var xw = rules.count(arr, 21);
+    if (dw == 0 && xw == 0) {
+        return rules.mayWithoutW(arr);
+    }
+    return rules.mayW(arr);
+}
 
+rules.mayWithoutW = function (arr) {
+    if (rules.allSame(arr)) return [arr];//boom
+    
+    var seq = rules.twoAs2(arr).sort(function (a, b) { return a - b; });
+    var cntA = rules.count(seq, 14);
+    if (cntA == 0) return [seq];//no a
+
+    var r = [];
+    if (rules.isSeq(seq)) {
+        r.push(seq);
+    }
+    var replacedA = seq;
+    for (var i = 0; i < cntA; i++) {
+        replacedA = rules.replaceFirstAas1(replacedA);
+        if (rules.isSeq(replacedA)) {
+            r.push(replacedA);
+        }
+    }
+    return r;
+}
+
+rules.mayW = function (arr) {
+    var dwcnt = rules.count(arr, 22);
+    var xwcnt = rules.count(arr, 21);
+    var rest = rules.restOfw(arr);
+    if (rest.length == 0) {
+        return rules.onlyW(arr);
+    }
+    if (rest.length == 1) {
+        return rules.wAnd1(rest[0],dwcnt+xwcnt);
+    }
+
+    if (rules.allSame(rest)) {
+        //w->boom
+        var num = rest[0];
+        for (var i = 0; i < dwcnt + xwcnt; i++) {
+            rest.push(num);
+        }
+        return [rest];
+    }
+    return rules.wInSeq(rest, dwcnt + xwcnt);
+}
+
+rules.wAnd1 = function (num, wcnt) {
+    var r = [];
+    //boom
+    var boom = [num];
+    for (var i = 0; i < wcnt; i++) {
+        boom.push(num);
+    }
+    r.push(boom);
+
+    var n = num;
+    if (n == 15) n = 2;
+
+    var seq = rules.getWseq1(num, wcnt);
+    for (var i = 0; i < seq.length; i++) {
+        r.push(seq[i]);
+    }
+
+    if (n == 14) {
+        var seq1 = rules.getWseq1(1, wcnt);
+        for (var i = 0; i < seq1.length; i++) {
+            r.push(seq1[i]);
+        }
+    }
+
+    return r;
+}
+
+rules.getWseq1 = function (num, wcnt) {
+    var r = [];
+    var min = num - wcnt;
+    var max = num + wcnt;
+    var width = [];//全长
+    var needcnt = wcnt + 1;
+    for (var i = min; i <= max; i++) {
+        width.push(i);
+    }
+    for (var i = 0; i < width.length - needcnt+1; i++) {
+        var n = [];
+        for (var j = 0; j < needcnt; j++) {
+            n.push(width[j+i]);
+        }
+        
+        if (rules.isSeq(n)) {
+            r.push(n);
+        }
+    }
+    return r;
+}
+
+rules.wInSeq = function (arr, wcnt) {
+    console.log("w in seq");
+}
+
+rules.onlyW = function (arr) {
+    var dwcnt = rules.count(arr, 22);
+    var xwcnt = rules.count(arr, 21);
+    if (dwcnt == 0 || xwcnt==0) {
+        return [arr];
+    } else {
+        var r = [];
+        for (var i = 0; i < dwcnt + xwcnt; i++) {
+            r.push(21);
+        }
+        return [r];
+    }
+}
+
+rules.restOfw = function (arr) {
+    var r = [];
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] < 20) {
+            r.push(arr[i]);
+        }
+    }
+    return r;
+}
+
+rules.replaceFirstAas1 = function (arr) {
+    var r = [];
+    var replaced = false;
+    for (var i = 0; i < arr.length; i++) {
+        if (!replaced) {
+            if (arr[i] == 14) {
+                replaced = true;
+                r.push(1);
+            } else {
+                r.push(arr[i]);
+            }
+        } else {
+            r.push(arr[i]);
+        }
+    }
+    return r;
 }
 
 
