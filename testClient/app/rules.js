@@ -84,7 +84,7 @@ rules.count= function(arr, v) {
     return cnt;
 }
 
-rules.may= function(arr) {
+rules.may= function(arr) { //enter
     var dw = rules.count(arr, 22);
     var xw = rules.count(arr, 21);
     if (dw == 0 && xw == 0) {
@@ -164,20 +164,50 @@ rules.wAnd1 = function (num, wcnt) {
 }
 
 rules.getWseq1 = function (num, wcnt) {
+    //var r = [];
+    //var min = num - wcnt;
+    //var max = num + wcnt;
+    //var width = [];//全长
+    //var needcnt = wcnt + 1;
+    //for (var i = min; i <= max; i++) {
+    //    width.push(i);
+    //}
+    //for (var i = 0; i < width.length - needcnt+1; i++) {
+    //    var n = [];
+    //    for (var j = 0; j < needcnt; j++) {
+    //        n.push(width[j+i]);
+    //    }
+        
+    //    if (rules.isSeq(n)) {
+    //        r.push(n);
+    //    }
+    //}
+    //return r;
+    return rules.getWseq([num], wcnt);
+}
+
+rules.getWseq = function (seq, wcnt) {
+    seq = seq.sort(function (a, b) { return a - b; });
+    var minInseq = seq[0];
+    var maxInseq = seq[seq.length - 1];
+    var min = minInseq - wcnt;
+    if (min < 1) min = 1;
+    var max = maxInseq + wcnt;
+    if (max > 14) max = 14;
+
     var r = [];
-    var min = num - wcnt;
-    var max = num + wcnt;
     var width = [];//全长
-    var needcnt = wcnt + 1;
+    var needcnt = wcnt + seq.length;
     for (var i = min; i <= max; i++) {
         width.push(i);
     }
-    for (var i = 0; i < width.length - needcnt+1; i++) {
+
+    for (var i = 0; i < width.length - needcnt + 1; i++) {
         var n = [];
         for (var j = 0; j < needcnt; j++) {
-            n.push(width[j+i]);
+            n.push(width[j + i]);
         }
-        
+
         if (rules.isSeq(n)) {
             r.push(n);
         }
@@ -186,7 +216,23 @@ rules.getWseq1 = function (num, wcnt) {
 }
 
 rules.wInSeq = function (arr, wcnt) {
-    console.log("w in seq");
+    var rest = arr.sort(function (a, b) { return a - b; });
+    var min = rest[0];
+    var max = rest[rest.length - 1];
+
+    var mid = max - min - 1;
+    var midneed = mid - (arr.length - 2);
+    if (midneed > wcnt) return [];
+
+    var restw = wcnt - midneed;
+    var baseseq = [];
+    for (var i = min; i <= max; i++) {
+        baseseq.push(i);
+    }
+    if (restw == 0) {
+        return[baseseq];
+    }
+    return rules.getWseq(baseseq, restw);
 }
 
 rules.onlyW = function (arr) {
