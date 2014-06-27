@@ -183,6 +183,8 @@
             $scope.push = function() {
                 var cards = $(".inhand .choose");
                 console.log(cards);
+
+                pushCards($scope, proxy, cards);
             };
         });
 
@@ -256,6 +258,25 @@
                 console.log(item);
                 $(item).toggleClass("choose");
             }
+        }
+
+        function pushCards(cards) {
+            var arr = cards.map(function () { return $(this).attr("v"); }).get(0);
+
+            var may = rules.may(arr);
+            if (may.length == 1) {
+                push2server(may[0], arr);
+            }
+            game.waitpushCards = arr;
+            showOption(may);
+        }
+
+        function push2server(arr, real) {
+            //check and if pass,post to server
+        }
+
+        function showOption(may) {
+            //show list of options
         }
 
     </script>
