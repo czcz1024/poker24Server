@@ -37,7 +37,7 @@ rules.allSame = function(arr) {
     return true;
 };
 
-rules.isBiger= function(last, arr) {
+rules.isBiger= function(last, arr,real) {
     if (rules.isBoom(last)) {
         if (rules.isBoom(arr)) {
             if (arr.length > last.length) return true;
@@ -45,7 +45,11 @@ rules.isBiger= function(last, arr) {
             if (arr[0] > last[0]) return true;
         }
         if (rules.isPair(arr)) {
-            if (arr[0] == 4) return true;
+            var dw = rules.count(real, 22);
+            var xw = rules.count(real, 21);
+            if (dw == 0 && xw == 0) {
+                if (arr[0] == 4) return true;
+            }
         }
     }
 
