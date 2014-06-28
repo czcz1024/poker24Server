@@ -112,13 +112,16 @@
     <div class="players">
         <ul>
             <li ng-repeat="item in data.seats" id="{{item.UserId}}">
-                {{item.UserName}}
+                <span>{{item.UserName}}</span>
                 <span>{{item.IsOk}}</span>
+                <span>{{item.Turn}}</span>
             </li>
         </ul>
     </div>
     <div class="pushes">
-        <div class="card" ng-repeat="item in data.lastPush" v="{{item.Value}}">{{item.Text}}</div>
+        <div class="card" ng-repeat="item in data.lastReal" v="{{item.Value}}">{{item.Text}}</div>
+        <hr />
+        <div class="card" ng-repeat="item in data.lastBig" v="{{item.Value}}">{{item.Text}}</div>
     </div>
     <div class="inhand">
         <div class="card1" ng-repeat="item in data.you.inHand" v="{{item.Value}}" onclick="tg(this)">{{item.Text}}</div>
@@ -140,7 +143,7 @@
         <div ng-if="data.gameState==1">
             <div ng-if="data.you.inturn==true">
                 <button ng-click="push()" ng-if="data.hasbigger==true">push</button>
-                <button ng-if="data.hasbigger==false">pass</button>
+                <button ng-click="pass()" ng-if="data.hasbigger==false">pass</button>
             </div>
             <div ng-if="data.you.inturn==false">
                 <button>wait</button>
@@ -172,6 +175,8 @@
                 inturn: false
             },
             lastPush: [],
+            lastReal:[],
+            lastBig: [],
             lastBigUser: "",
             nowSpeaker: "",
             gameState: 1,
@@ -208,6 +213,10 @@
                 
 
                 pushCards($scope, proxy, cards);
+            };
+
+            $scope.pass = function() {
+                proxy.server.pass(tabid, uid);
             };
         });
 
@@ -263,9 +272,12 @@
             game.lastPush = tab.LastHand;
             game.gameState = tab.State;
             game.lastBigUser = tab.BigUser;
+            game.lastBig = tab.LastBigHand;
+            game.lastReal = tab.LastRealHand;
             game.nowSpeaker = tab.WaitUser;
             game.owner = tab.OwnerId;
             checkHasBiger();
+            console.log("filldata");
         }
 
         function fillUser(users) {
@@ -354,6 +366,10 @@
         function send2server(arr, real) {
             
             $.connection.tabHub.server.push(game.tabid, game.uid, arr, real);
+        }
+
+        function g() {
+            $.connection.tabHub.server.game(game.tabid);
         }
     </script>
 </body>

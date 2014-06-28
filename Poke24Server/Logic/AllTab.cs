@@ -113,7 +113,7 @@ namespace Poke24Server.Logic
 
         public void Pass(Guid uid)
         {
-            SetNextUser();
+            SetNextUser(false);
         }
 
         public void Push(Guid uid, IEnumerable<int> card, IEnumerable<int> real)
@@ -130,22 +130,87 @@ namespace Poke24Server.Logic
             {
                 SetUserFinish(uid);
             }
+            var is44 = false;
+            var realcard = real.Select(x => new Card(x)).ToList();
+            var cardlist = card.Select(x => new Card(x)).ToList();
+            if (IsPair(realcard) && realcard[0].Value == 4)
+            {
+                if (IsBoom(Info.LastHand))
+                {
+                    is44 = true;
+                    Info.LastBigHand = realcard;
+                    Info.LastHand = new List<Card>();
+                    Info.LastRealHand = new List<Card>();
 
-            Info.LastHand = card.Select(x=>new Card(x)).ToList();
+                }
+                else
+                {
+                    Info.LastBigHand = new List<Card>();
+                    Info.LastHand = cardlist;
+                    Info.LastRealHand = realcard;
+                }
+            }
+            else
+            {
+                Info.LastHand = cardlist;
+                Info.LastRealHand = realcard;
+            }
+            
             Info.BigUser = uid;
-
-            SetNextUser();
+            
+            SetNextUser(is44);
         }
 
-        private void SetNextUser()
+        private void SetNextUser(bool is44)
         {
-            var nowpush = Info.WaitUser;
-            //todo check 44 for boom
+            var nowpush =Users.FirstOrDefault(x=>x.UserId== Info.WaitUser);
+            if (is44) return;
+
+            var rest = Users.OrderBy(x => x.Index).FirstOrDefault(x => !x.IsFinish && x.Index > nowpush.Index);
+            if (rest == null)
+            {
+                rest = Users.OrderBy(x => x.Index).FirstOrDefault(x => !x.IsFinish);
+            }
+            if (nowpush.UserId == rest.UserId)
+            {
+                Info.LastBigHand = Info.LastRealHand;
+                Info.LastHand = new List<Card>();
+                Info.LastRealHand = new List<Card>();
+            }
+            else
+            {
+                Info.LastBigHand = new List<Card>();
+            }
+
+            Info.WaitUser = rest.UserId;
+
+            //todo check last big is self
+            if (Info.WaitUser == Info.BigUser)
+            {
+                Info.LastBigHand = Info.LastRealHand;
+                Info.LastHand = new List<Card>();
+                Info.LastRealHand = new List<Card>();
+            }
         }
 
         private void SetUserFinish(Guid uid)
         {
             //todo
+        }
+
+        public bool IsBoom(List<Card> cards)
+        {
+            return cards.Count > 2 && IsAllSame(cards);
+        }
+
+        public bool IsAllSame(List<Card> cards)
+        {
+            return cards.All(x => x.Value == cards[0].Value);
+        }
+
+        public bool IsPair(List<Card> cards)
+        {
+            return cards.Count == 2 && IsAllSame(cards);
         }
     }
 
@@ -162,6 +227,10 @@ namespace Poke24Server.Logic
         public Guid WaitUser { get; set; }
 
         public List<Card> LastHand { get; set; }
+
+        public List<Card> LastRealHand { get; set; }
+
+        public List<Card> LastBigHand { get; set; }
 
         public int State { get; set; }
     }

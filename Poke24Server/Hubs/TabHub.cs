@@ -91,6 +91,12 @@
 
         }
 
+        public void Game(Guid guid)
+        {
+            var tab = Tab.GetTab(guid);
+            Clients.Caller.test(tab);
+        }
+
         public bool EnterTab(Guid tabid, Guid uid)
         {
             var tab = Tab.GetTab(tabid);
@@ -107,6 +113,7 @@
             {
                 tab.Start();
                 RefreshInfo(tabid);
+                RefreshYou(tabid, tab.Info.WaitUser);
             }
             RefreshYou(tabid, uid);
         }
@@ -122,6 +129,7 @@
             RefreshInfo(tabid);
             RefreshUsers(tabid);
             RefreshYou(tabid, uid);
+            RefreshYou(tabid, tab.Info.WaitUser);
         }
 
         public void Pass(Guid tabid, Guid uid)
@@ -130,6 +138,8 @@
             tab.Pass(uid);
             RefreshInfo(tabid);
             RefreshUsers(tabid);
+            RefreshYou(tabid, uid);
+            RefreshYou(tabid, tab.Info.WaitUser);
         }
     }
 }
