@@ -228,6 +228,7 @@ namespace Poke24Server.Logic
 
         public void GameOver()
         {
+            Info.State = 2;
         }
 
         public bool IsBoom(List<Card> cards)
