@@ -113,8 +113,11 @@
         <ul>
             <li ng-repeat="item in data.seats" id="{{item.UserId}}">
                 <span>{{item.UserName}}</span>
-                <span>{{item.IsOk}}</span>
-                <span>{{item.Turn}}</span>
+                <span ng-if="data.state==0">{{item.IsOk}}</span>
+                <span ng-if="data.state==1">
+                    <span ng-if="item.IsFinish==false">{{item.Turn}}</span>
+                    <span ng-if="item.IsFinish==true">{{item.Rank}}</span>
+                </span>
             </li>
         </ul>
     </div>
@@ -289,6 +292,8 @@
             game.you.inHand = you.InHand;
             game.you.ready = you.Ready;
             game.you.inturn = you.Turn;
+            game.you.finish = you.IsFinish;
+            game.you.rank = you.Rank;
             checkHasBiger();
         }
 
