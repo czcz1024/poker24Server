@@ -114,6 +114,18 @@ namespace Poke24Server.Logic
         public void Pass(Guid uid)
         {
             SetNextUser(false);
+            if (Info.FinishCardPassSeat != null)
+            {
+                Info.FinishCardPassSeat.Add(Info.WaitUser);
+
+                if (Info.FinishCardPassSeat.Any(x => x == Info.WaitUser))
+                {
+                    //硬风
+                    Info.LastBigHand = Info.LastRealHand;
+                    Info.LastHand = new List<Card>();
+                    Info.LastRealHand = new List<Card>();
+                }
+            }
         }
 
         public void Push(Guid uid, IEnumerable<int> card, IEnumerable<int> real)
@@ -157,7 +169,7 @@ namespace Poke24Server.Logic
             }
             
             Info.BigUser = uid;
-            
+            Info.FinishCardPassSeat = null;
             SetNextUser(is44);
         }
 
@@ -196,6 +208,26 @@ namespace Poke24Server.Logic
         private void SetUserFinish(Guid uid)
         {
             //todo
+            Info.FinishCardPassSeat = new List<Guid>();
+
+            var u = GetUser(uid);
+            u.IsFinish = true;
+            var ufcnt = Users.Count(x => x.IsFinish);
+            u.Rank = ufcnt;
+
+            if (ufcnt == Info.UserCnt - 1)
+            {
+                var lastu = Users.FirstOrDefault(x => !x.IsFinish);
+                lastu.IsFinish=true;
+                lastu.Rank = Info.UserCnt;
+                GameOver();
+                
+            }
+
+        }
+
+        public void GameOver()
+        {
         }
 
         public bool IsBoom(List<Card> cards)
@@ -233,6 +265,8 @@ namespace Poke24Server.Logic
         public List<Card> LastBigHand { get; set; }
 
         public int State { get; set; }
+
+        public List<Guid> FinishCardPassSeat { get; set; }
     }
 
     public class Seat
@@ -248,6 +282,8 @@ namespace Poke24Server.Logic
         public bool IsFinish { get; set; }
 
         public List<Card> InHand { get; set; }
+
+        public int Rank { get; set; }
 
         public Seat()
         {
