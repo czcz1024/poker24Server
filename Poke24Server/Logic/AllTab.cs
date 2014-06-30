@@ -15,6 +15,10 @@ namespace Poke24Server.Logic
         static AllTab()
         {
             All = new ConcurrentDictionary<Guid, Tab>();
+            foreach (var item in new MockData().Tabs)
+            {
+                Tab.GetTab(item.Id);
+            }
         }
 
     }

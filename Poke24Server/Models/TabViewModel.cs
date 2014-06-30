@@ -7,5 +7,7 @@
         public Guid Id { get; set; }
 
         public int PlayerCount { get; set; }
+
+        public int AlReady { get; set; }
     }
 }

@@ -17,3 +17,8 @@ $(function () {
         init();
     }
 });
+
+function quit() {
+    localStorage.clear();
+    location.href = "login.html";
+}

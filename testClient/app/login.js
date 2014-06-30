@@ -58,10 +58,10 @@ function goReg(uname, pass) {
         },
         success: function (data) {
             if (data == "00000000-0000-0000-0000-000000000000") {
-                alert("已被使用");
+                alert("尚未开放");
             } else {
                 localStorage.setItem("uid", data);
-                goTabList();
+                //goTabList();
             }
         }
     });

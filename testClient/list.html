@@ -1,22 +1,108 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="poke24">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link href="Content/bootstrap.css" rel="stylesheet" />
-    <link href="Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="Content/font-awesome.css" rel="stylesheet" />
+    <script src="Scripts/angular.js"></script>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        a,a:hover{
+            text-decoration:none
+        }
+         html,body{
+             height:100%;
+         }
+        .tools{
+            position:fixed;
+            bottom:0px;
+            width:100%;
+            height:10%;
+        }
+        .tools ul{
+            width:100%;
+            height:100%;
+        }
+        .tools ul li{
+            float:left;
+            height:100%;
+            width:25%;
+            list-style: none outside none;
+            text-align:center;
+        }
+        .tools ul li a{
+            width:100%;
+        }
+    </style>
 </head>
 <body>
-    <button id="create">create</button>
-    <div>
-        <ul id="container">
-            <li>loading...</li>
+    <button id="create" class="btn btn-primary disabled">create</button>
+    <div ng-controller="list">
+        <ul id="container" class="list-group">
+            <li class="list-group-item" ng-repeat="item in data" v="{{item.Id}}" onclick="goTab(this)">
+                <span class="badge">{{item.AlReady}}</span>
+                {{item.PlayerCount}} 人
+            </li>
         </ul>
     </div>
-    
+    <div class="tools" >
+        <ul>
+            <li>
+                <a class="btn "><i class="fa fa-cog fa-2x"></i><br />设置</a>
+            </li>
+            <li>
+                <a class="btn "><i class="fa fa-users fa-2x"></i><br />好友</a>
+            </li>
+            <li>
+                <a class="btn "><i class="fa fa-user fa-2x"></i><br />信息</a>
+            </li>
+            <li>
+                <a onclick="quit()" class="btn ">
+                    <i class="fa fa-sign-out fa-2x"></i>
+                    <br />退出
+                </a>
+            </li>
+        </ul>
+    </div>
     <script src="Scripts/jquery-2.1.1.js"></script>
     <script src="Scripts/bootstrap.js"></script>
     <script src="app/app.js"></script>
-    <script src="app/list.js"></script>
+    <!--<script src="app/list.js"></script>-->
+    <script>
+        var apps = angular.module("poke24", []);
+
+        apps.controller("list", function ($scope,$http) {
+            var uid = localStorage.getItem("uid");
+            if (uid == null) {
+                location.href = "login.html";
+                return;
+            }
+            var url = app.apiBaseUrl + "api/tabs/list";
+
+            $http.get(url).success(function (data) {
+                $scope.data = data;
+            });
+
+            $("#create").click(function () {
+                //createTab();
+                alert("尚未开放");
+            });
+        });
+
+        function goTab(item) {
+            var id = $(item).attr("v");
+            gotab(id);
+        }
+
+        function gotab(id) {
+            localStorage.setItem("tabid", id);
+            location.href = "b.html";
+        }
+
+    </script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 <head>
     <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="Content/font-awesome.css" rel="stylesheet" />
+    
     <title></title>
     <style>
         * {
@@ -20,11 +22,17 @@
             background-color: green;
         }
 
-            .players li {
-                float: left;
-                height: 100%;
-                width: 15%;
-            }
+        .players div {
+            float: left;
+            height: 100%;
+            width: 15%;
+            background-color:white;
+            text-align:center;
+        }
+        .players div span{
+            width:100%;
+            display:inline-block;
+        }
 
         .options {
             width: 100%;
@@ -78,6 +86,25 @@
             height:20%;
         }
 
+        .btn{
+            background-color: #428bca;
+            border-color: #357ebd;
+            color: #ffffff;
+             -moz-user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 1.42857;
+            margin-bottom: 0;
+            padding: 6px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
         @media screen and (max-width: 360px) {
             .card {
                 width: 40px;
@@ -110,16 +137,22 @@
 </head>
 <body ng-controller="body">
     <div class="players">
-        <ul>
-            <li ng-repeat="item in data.seats" id="{{item.UserId}}">
-                <span>{{item.UserName}}</span>
-                <span ng-if="data.state==0">{{item.IsOk}}</span>
-                <span ng-if="data.state==1">
-                    <span ng-if="item.IsFinish==false">{{item.Turn}}</span>
-                    <span ng-if="item.IsFinish==true">{{item.Rank}}</span>
+        <div ng-repeat="item in data.seats" id="{{item.UserId}}">
+            <i class="fa fa-user"></i>
+            <span>{{item.UserName}}</span>
+            <span ng-if="data.gameState==0">
+                <span ng-if="item.IsOk==true">准备</span>
+                <span ng-if="item.IsOk==false">等待</span>
+            </span>
+            <span ng-if="data.gameState==1">
+                <span ng-if="item.IsFinish==false">
+                    <span ng-if="item.Turn==true">
+                        等他
+                    </span>
                 </span>
-            </li>
-        </ul>
+                <span ng-if="item.IsFinish==true">{{item.Rank}}</span>
+            </span>
+        </div>
     </div>
     <div class="pushes">
         <div class="card" ng-repeat="item in data.lastReal" v="{{item.Value}}">{{item.Text}}</div>
@@ -140,20 +173,20 @@
             document.write("w:" + window.screen.width + ",h:" + window.screen.height);
         </script>
         <div ng-if="data.gameState==0">
-            <button ng-if="data.you.ready==false" ng-click="ready()">ready</button>
+            <button ng-if="data.you.ready==false" ng-click="ready()">准备</button>
             <button ng-if="data.you.ready==true">wait</button>
         </div>
         <div ng-if="data.gameState==1">
             <div ng-if="data.you.inturn==true">
-                <button ng-click="push()" ng-if="data.hasbigger==true">push</button>
-                <button ng-click="pass()" ng-if="data.hasbigger==false">pass</button>
+                <button ng-click="push()" ng-if="data.hasbigger==true" class="btn btn-primary">出</button>
+                <button ng-click="pass()" ng-if="data.hasbigger==false" class="btn">过</button>
             </div>
             <div ng-if="data.you.inturn==false">
-                <button>wait</button>
+                <span class="btn">等</span>
             </div>
         </div>
         <div ng-if="data.gameState==2">
-            <button>finish</button>
+            <button class="btn">完</button>
         </div>
     </div>
     
@@ -284,7 +317,11 @@
         }
 
         function fillUser(users) {
+            for (var i = 0; i < users.length; i++) {
+                users[i].Turn = users[i].UserId == game.nowSpeaker;
+            }
             game.seats = users;
+            
         }
 
         function fillyou(you) {

@@ -22,7 +22,7 @@ function fillListData() {
             $("#container").empty();
             if (data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
-                    $("#container").append("<li onclick=\"gotab('" + data[i].Id + "')\">" + data[i].PlayerCount + "人</li>");
+                    $("#container").append("<li  class='list-group-item' onclick=\"gotab('" + data[i].Id + "')\">" + data[i].PlayerCount + "人</li>");
                 }
             }
         }

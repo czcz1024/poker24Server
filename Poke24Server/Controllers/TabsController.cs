@@ -11,6 +11,7 @@ namespace Poke24Server.Controllers
     using System.Web.Http.Cors;
 
     using Poke24Server.Database;
+    using Poke24Server.Logic;
 
     [EnableCors("*","*","*")]
     public class TabsController : ApiController
@@ -31,39 +32,12 @@ namespace Poke24Server.Controllers
         public IEnumerable<TabViewModel> List()
         {
             //return db.Tabs.ToList().Select(this.ConvertToViewModel);
-            var list = new List<TabViewModel>
-            {
-                new TabViewModel
-                {
-                    Id=Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                    PlayerCount=1
-                },
-                new TabViewModel
-                {
-                    Id=Guid.Parse("00000000-0000-0000-0000-000000000002"),
-                    PlayerCount=2
-                },
-                new TabViewModel
-                {
-                    Id=Guid.Parse("00000000-0000-0000-0000-000000000003"),
-                    PlayerCount=3
-                },
-                new TabViewModel
-                {
-                    Id=Guid.Parse("00000000-0000-0000-0000-000000000004"),
-                    PlayerCount=4
-                }
-            };
+            var list = AllTab.All.Select(x => new TabViewModel{
+                Id=x.Key,
+                PlayerCount=x.Value.Info.UserCnt,
+                AlReady=x.Value.Users.Count(y=>y.UserId!=Guid.Empty)
+            }).ToList();
             return list;
-        }
-
-        private TabViewModel ConvertToViewModel(Tabs tabs)
-        {
-            var r = new TabViewModel(){
-                Id=tabs.Id,
-                PlayerCount=tabs.Player
-            };
-            return r;
         }
 
         [HttpPost,HttpOptions]
