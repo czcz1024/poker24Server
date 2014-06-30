@@ -16,7 +16,7 @@
         {
             var tab = this.Context.QueryString["tab"];
             var uid = this.Context.QueryString["uid"];
-            Clients.Caller.test(Context.ConnectionId+" conn to "+tab);
+            //Clients.Caller.test(Context.ConnectionId+" conn to "+tab);
             var t1=Groups.Add(Context.ConnectionId, tab);
             var t2=Groups.Add(Context.ConnectionId, tab + "_" + uid);
             Task.WaitAll(t1, t2);
@@ -77,7 +77,7 @@
 
         public override System.Threading.Tasks.Task OnReconnected()
         {
-            Clients.Caller.test("re");
+            //Clients.Caller.test("re");
             return base.OnReconnected();
         }
 
@@ -87,6 +87,14 @@
             var uid = this.Context.QueryString["uid"];
             Groups.Remove(Context.ConnectionId, tab);
             Groups.Remove(Context.ConnectionId, tab+"_"+uid);
+            var tabid = Guid.Parse(tab);
+            var uguid = Guid.Parse(uid);
+            var tabs = Tab.GetTab(tabid);
+            tabs.UserOut(uguid);
+
+            RefreshInfo(tabid);
+            RefreshUsers(tabid);
+
             return base.OnDisconnected();
 
         }
@@ -94,7 +102,7 @@
         public void Game(Guid guid)
         {
             var tab = Tab.GetTab(guid);
-            Clients.Caller.test(tab);
+            //Clients.Caller.test(tab);
         }
 
         public bool EnterTab(Guid tabid, Guid uid)
@@ -109,20 +117,34 @@
             var seat = tab.GetUser(uid);
             seat.IsOk = true;
             RefreshUsers(tabid);
+
+            var start = false;
             if (tab.Users.All(x => x.IsOk))
             {
                 tab.Start();
-                RefreshInfo(tabid);
-                RefreshYou(tabid, tab.Info.WaitUser);
+                start = true;
+                
             }
-            RefreshYou(tabid, uid);
+            RefreshInfo(tabid);
+            RefreshUsers(tabid);
+            if (start)
+            {
+                foreach (var item in tab.Users)
+                {
+                    RefreshYou(tabid, item.UserId);
+                }
+            }
+            else
+            {
+                RefreshYou(tabid, tab.Info.WaitUser);
+                RefreshYou(tabid,uid);
+            }
         }
 
         public void Push(Guid tabid, Guid uid, IEnumerable<int> card, IEnumerable<int> real)
         {
-            string txt = uid + " has push cards to " + tabid + ":"
-                         + card.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + "(" + real.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + ")";
-            Clients.Caller.test(txt);
+            //string txt = uid + " has push cards to " + tabid + ":"+ card.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + "(" + real.Select(x => x.ToString()).Aggregate((a, b) => a + "," + b) + ")";
+            //Clients.Caller.test(txt);
 
             var tab = Tab.GetTab(tabid);
             tab.Push(uid,card, real);

@@ -381,6 +381,18 @@ rules.hasBiger= function(last, hand) {
         }
     }
 
+    if (rules.isPair(last)) {
+        for (i = last[0] + 1; i <= 15; i++) {
+            if (card15[i] + dw + xw > 1) return true;
+        }
+
+    }
+    if (rules.isSingle(last)) {
+        for (i = last[0] + 1; i <= 15; i++) {
+            if (card15[i] + dw + xw > 0) return true;
+        }
+    }
+
     return false;
 }
 

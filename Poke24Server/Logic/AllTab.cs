@@ -63,6 +63,32 @@ namespace Poke24Server.Logic
 
         public bool UserEnter(Guid uid)
         {
+            if (Info.State == 2)
+            {
+                using (var db = new MockData())
+                {
+                    var t = db.Tabs.FirstOrDefault(x => x.Id == Info.Id);
+                    Info.State = 0;
+                    Info.FinishCardPassSeat = null;
+                    Info.LastRealHand = new List<Card>();
+                    Info.LastBigHand = new List<Card>();
+                    Info.BigUser = Guid.Empty;
+                    Info.OwnerId = Guid.Empty;
+                    Info.WaitUser = Guid.Empty;
+                    
+                    if (t != null)
+                    {
+                        Users = new List<Seat>();
+                        Info.LastHand = new List<Card>();
+                        for (var i = 0; i < Info.UserCnt; i++)
+                        {
+                            Users.Add(new Seat { Index = i });
+                        }
+                    }
+
+                }
+            }
+
             if (Users.Any(x => x.UserId == uid)) return true;
             if (Users.All(x => x.UserId != Guid.Empty))
             {
@@ -145,6 +171,11 @@ namespace Poke24Server.Logic
             if (!u.InHand.Any())
             {
                 SetUserFinish(uid);
+            }
+            if (Info.State == 2)
+            {
+
+                return;
             }
             var is44 = false;
             var realcard = real.Select(x => new Card(x)).ToList();
@@ -233,6 +264,7 @@ namespace Poke24Server.Logic
         public void GameOver()
         {
             Info.State = 2;
+            
         }
 
         public bool IsBoom(List<Card> cards)
@@ -248,6 +280,19 @@ namespace Poke24Server.Logic
         public bool IsPair(List<Card> cards)
         {
             return cards.Count == 2 && IsAllSame(cards);
+        }
+
+        public void UserOut(Guid uguid)
+        {
+            var u=Users.FirstOrDefault(x => x.UserId == uguid);
+            if (u != null)
+            {
+                Users.Remove(u);
+                if (Info.State == 1)
+                {
+                    GameOver();
+                }
+            }
         }
     }
 
