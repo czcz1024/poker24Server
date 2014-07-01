@@ -43,7 +43,7 @@ namespace Poke24Server.Controllers
         [HttpPost,HttpOptions]
         public Guid Login([FromBody] LoginViewModel info)
         {
-            var obj = Users.FirstOrDefault(x => x.UserName == info.Username && x.Password == info.Password);
+            var obj = new MockData().Users.FirstOrDefault(x => x.UserName == info.Username && x.Password == info.Password);
             if (obj == null)
             {
                 return Guid.Empty;
@@ -51,36 +51,6 @@ namespace Poke24Server.Controllers
             return obj.Id;
         }
 
-        public static List<Users> Users = new List<Users>
-        {
-            new Users
-            {
-                Id=Guid.Parse("10000000-0000-0000-0000-000000000000"),
-                UserName="a",
-                Password="a",
-                NickName="a"
-            },
-            new Users
-            {
-                Id=Guid.Parse("20000000-0000-0000-0000-000000000000"),
-                UserName="b",
-                Password="b",
-                NickName="b"
-            },
-            new Users
-            {
-                Id=Guid.Parse("30000000-0000-0000-0000-000000000000"),
-                UserName="c",
-                Password="c",
-                NickName="c"
-            },
-            new Users
-            {
-                Id=Guid.Parse("40000000-0000-0000-0000-000000000000"),
-                UserName="d",
-                Password="d",
-                NickName="d"
-            }
-        };
+        
     }
 }

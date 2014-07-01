@@ -154,7 +154,7 @@ namespace Poke24Server.Logic
             SetNextUser(false);
             if (Info.FinishCardPassSeat != null)
             {
-                Info.FinishCardPassSeat.Add(Info.WaitUser);
+                Info.FinishCardPassSeat.Add(uid);
 
                 if (Info.FinishCardPassSeat.Any(x => x == Info.WaitUser))
                 {
@@ -179,6 +179,11 @@ namespace Poke24Server.Logic
             if (!u.InHand.Any())
             {
                 SetUserFinish(uid);
+                Info.FinishCardPassSeat = new List<Guid>();
+            }
+            else
+            {
+                Info.FinishCardPassSeat = null;
             }
             if (Info.State == 2)
             {
@@ -212,7 +217,6 @@ namespace Poke24Server.Logic
             }
             
             Info.BigUser = uid;
-            Info.FinishCardPassSeat = null;
             SetNextUser(is44);
         }
 
@@ -251,7 +255,6 @@ namespace Poke24Server.Logic
         private void SetUserFinish(Guid uid)
         {
             //todo
-            Info.FinishCardPassSeat = new List<Guid>();
 
             var u = GetUser(uid);
             u.IsFinish = true;
