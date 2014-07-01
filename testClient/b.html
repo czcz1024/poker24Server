@@ -173,12 +173,12 @@
             document.write("w:" + window.screen.width + ",h:" + window.screen.height);
         </script>
         <div ng-if="data.gameState==0">
-            <button ng-if="data.you.ready==false" ng-click="ready()">准备</button>
-            <button ng-if="data.you.ready==true">wait</button>
+            <button ng-if="data.you.ready==false" ng-click="ready()" class="btn">准备</button>
+            <button ng-if="data.you.ready==true" class="btn">wait</button>
         </div>
         <div ng-if="data.gameState==1">
             <div ng-if="data.you.inturn==true">
-                <button ng-click="push()" ng-if="data.hasbigger==true" class="btn btn-primary">出</button>
+                <button ng-click="push()" ng-if="data.hasbigger==true" class="btn">出</button>
                 <button ng-click="pass()" ng-if="data.hasbigger==false" class="btn">过</button>
             </div>
             <div ng-if="data.you.inturn==false">
