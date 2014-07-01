@@ -270,13 +270,13 @@
             var proxy = $.connection.tabHub;
             game.proxy = proxy;
             $.connection.hub.error(function (error) {
-                console.log('SignalR error: ' + error);
+                alert(error);
             });
             $.connection.hub.url = url + "signalr";
 
             var client = $.connection.tabHub.client;
             setClientFunc(client,$scope);
-            $.connection.hub.start();
+            $.connection.hub.start({jsonp:true});
 
             return proxy;
         }

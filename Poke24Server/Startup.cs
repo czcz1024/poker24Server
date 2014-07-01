@@ -27,7 +27,9 @@ namespace Poke24Server
                     // You can enable JSONP by uncommenting line below.
                     // JSONP requests are insecure but some older browsers (and some
                     // versions of IE) require JSONP to work cross domain
-                    // EnableJSONP = true
+                     EnableJSONP = true,
+                     EnableDetailedErrors=true,
+                     EnableJavaScriptProxies=true,
                 };
                 // Run the SignalR pipeline. We're not using MapSignalR
                 // since this branch already runs under the "/signalr"

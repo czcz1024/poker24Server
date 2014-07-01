@@ -9,6 +9,11 @@ using System.Web.Routing;
 
 namespace Poke24Server
 {
+    using Microsoft.AspNet.SignalR;
+    using Microsoft.AspNet.SignalR.Infrastructure;
+
+    using Poke24Server.Hubs;
+
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
@@ -21,6 +26,7 @@ namespace Poke24Server
 
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
 
+            GlobalHost.DependencyResolver.Register(typeof(IProtectedData), () => new EmptyProtectedData());
         }
     }
 }

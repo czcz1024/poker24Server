@@ -194,6 +194,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\EmptyProtectedData.cs" />
     <Compile Include="Hubs\TabHub.cs" />
     <Compile Include="Logic\AllTab.cs" />
     <Compile Include="Migrations\201406230349019_InitialCreate.cs" />
