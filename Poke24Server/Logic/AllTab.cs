@@ -89,6 +89,14 @@ namespace Poke24Server.Logic
                 }
             }
 
+            if (Users.Count == 0)
+            {
+                for (var i = 0; i < Info.UserCnt; i++)
+                {
+                    Users.Add(new Seat { Index = i });
+                }
+            }
+
             if (Users.Any(x => x.UserId == uid)) return true;
             if (Users.All(x => x.UserId != Guid.Empty))
             {

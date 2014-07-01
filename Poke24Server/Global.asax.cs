@@ -26,7 +26,7 @@ namespace Poke24Server
 
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
 
-            GlobalHost.DependencyResolver.Register(typeof(IProtectedData), () => new EmptyProtectedData());
+            //GlobalHost.DependencyResolver.Register(typeof(IProtectedData), () => new EmptyProtectedData());
         }
     }
 }

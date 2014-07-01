@@ -265,12 +265,13 @@
         }
         function connectToServer($scope) {
             var url = "http://localhost:1432/";
+            //$.connection.ajaxDefaults.crossDomain=true;
             $.connection.hub.qs = { "tab": game.tabid, "uid": game.uid };
 
             var proxy = $.connection.tabHub;
             game.proxy = proxy;
             $.connection.hub.error(function (error) {
-                alert(error);
+                //alert(error);
             });
             $.connection.hub.url = url + "signalr";
 
@@ -313,7 +314,6 @@
             game.nowSpeaker = tab.WaitUser;
             game.owner = tab.OwnerId;
             checkHasBiger();
-            console.log("filldata");
         }
 
         function fillUser(users) {
