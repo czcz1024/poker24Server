@@ -85,18 +85,26 @@
         {
             var tab = this.Context.QueryString["tab"];
             var uid = this.Context.QueryString["uid"];
-            Groups.Remove(Context.ConnectionId, tab);
-            Groups.Remove(Context.ConnectionId, tab+"_"+uid);
+            
             var tabid = Guid.Parse(tab);
             var uguid = Guid.Parse(uid);
+            OutTab(tabid, uguid);
+
+            return base.OnDisconnected();
+
+        }
+
+        public void OutTab(Guid tabid, Guid uid)
+        {
+            Groups.Remove(Context.ConnectionId, tabid.ToString());
+            Groups.Remove(Context.ConnectionId, tabid + "_" + uid);
             var tabs = Tab.GetTab(tabid);
-            tabs.UserOut(uguid);
+            tabs.UserOut(uid);
 
             RefreshInfo(tabid);
             RefreshUsers(tabid);
 
-            return base.OnDisconnected();
-
+            Clients.Group(tabid.ToString()).test(uid + " out ");
         }
 
         public void Game(Guid guid)
