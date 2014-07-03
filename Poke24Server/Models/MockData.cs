@@ -209,6 +209,13 @@ namespace Poke24Server.Models
                         UserName = "weh",
                         Password = "123456",
                         NickName = "小王"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("24000000-0000-0000-0000-000000000000"),
+                        UserName = "lxp",
+                        Password = "123456",
+                        NickName = "小平"
                     }
                 };
             }
