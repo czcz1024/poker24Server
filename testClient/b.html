@@ -413,6 +413,10 @@
         function g() {
             $.connection.tabHub.server.game(game.tabid);
         }
+
+        function gameover() {
+            $.connection.hub.stop(false,true);
+        }
     </script>
 </body>
 </html>

@@ -298,7 +298,12 @@ namespace Poke24Server.Logic
             var u=Users.FirstOrDefault(x => x.UserId == uguid);
             if (u != null)
             {
-                Users.Remove(u);
+                u.UserId = Guid.Empty;
+                u.UserName = "";
+                u.Rank = 0;
+                u.IsFinish = false;
+                u.IsOk = false;
+                u.InHand = new List<Card>();
                 if (Info.State == 1)
                 {
                     GameOver();

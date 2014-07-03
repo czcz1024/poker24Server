@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <script>
+        (function () {
+            "use strict";
+
+            document.addEventListener('deviceready', onDeviceReady.bind(this), false);
+
+            function onDeviceReady() {
+                // Handle the Cordova pause and resume events
+
+                document.addEventListener('pause', onPause.bind(this), false);
+                document.addEventListener('resume', onResume.bind(this), false);
+                
+                document.addEventListener("backbutton", onBackKeyDown, false);
+
+                document.addEventListener("menubutton", onMenuKeyDown, false);
+                // TODO: Cordova has been loaded. Perform any initialization that requires Cordova here.
+            };
+
+            function onPause() {
+                // TODO: This application has been suspended. Save application state here.
+            };
+
+            function onResume() {
+                // TODO: This application has been reactivated. Restore application state here.
+            };
+
+            function onBackKeyDown() {
+                window.plugins.ToastPlugin.show_short('再点击一次退出!');
+                document.removeEventListener("backbutton", onBackKeyDown, false); //注销返回键
+                document.addEventListener("backbutton", exitApp, false);
+                
+                //3秒后重新注册
+                var intervalID = window.setInterval(
+                function () {
+                    window.clearInterval(intervalID);
+                    document.removeEventListener("backbutton", exitApp, false);
+                    document.addEventListener("backbutton", onBackKeyDown, false); //返回键
+                },3000);
+            }
+
+            function onMenuKeyDown() {
+                //处理菜单按钮操作 
+            }
+
+            function exitApp() {
+                navigator.app.exitApp();
+            }
+        })();
+    </script>
+</body>
+</html>
