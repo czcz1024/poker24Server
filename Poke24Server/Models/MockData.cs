@@ -31,6 +31,16 @@ namespace Poke24Server.Models
                 {
                     Id=Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Player=4
+                },
+                new Tabs
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000005"),
+                    Player=5
+                },
+                new Tabs
+                {
+                    Id=Guid.Parse("00000000-0000-0000-0000-000000000006"),
+                    Player=6
                 }
             };
             }
@@ -108,6 +118,97 @@ namespace Poke24Server.Models
                         UserName = "i",
                         Password = "i",
                         NickName = "i"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("11000000-0000-0000-0000-000000000000"),
+                        UserName = "cz",
+                        Password = "123456",
+                        NickName = "陈重"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("12000000-0000-0000-0000-000000000000"),
+                        UserName = "sjf",
+                        Password = "123456",
+                        NickName = "剑锋"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("13000000-0000-0000-0000-000000000000"),
+                        UserName = "zy",
+                        Password = "123456",
+                        NickName = "赵勇"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("14000000-0000-0000-0000-000000000000"),
+                        UserName = "wxz",
+                        Password = "123456",
+                        NickName = "欣卓"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("15000000-0000-0000-0000-000000000000"),
+                        UserName = "lw",
+                        Password = "123456",
+                        NickName = "刘伟"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("16000000-0000-0000-0000-000000000000"),
+                        UserName = "lzq",
+                        Password = "123456",
+                        NickName = "振强"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("17000000-0000-0000-0000-000000000000"),
+                        UserName = "lwh",
+                        Password = "123456",
+                        NickName = "华仔"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("18000000-0000-0000-0000-000000000000"),
+                        UserName = "jxd",
+                        Password = "123456",
+                        NickName = "晓东"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("19000000-0000-0000-0000-000000000000"),
+                        UserName = "myw",
+                        Password = "123456",
+                        NickName = "小马"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                        UserName = "bxj",
+                        Password = "123456",
+                        NickName = "白哥"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("21000000-0000-0000-0000-000000000000"),
+                        UserName = "yzq",
+                        Password = "123456",
+                        NickName = "占强"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("22000000-0000-0000-0000-000000000000"),
+                        UserName = "zp",
+                        Password = "123456",
+                        NickName = "张鹏"
+                    },
+                    new Users
+                    {
+                        Id = Guid.Parse("23000000-0000-0000-0000-000000000000"),
+                        UserName = "weh",
+                        Password = "123456",
+                        NickName = "小王"
                     }
                 };
             }
